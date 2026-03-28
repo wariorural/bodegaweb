@@ -126,7 +126,7 @@ nav {
 /* ─── EVENT LIST ─── */
 .event-row {
   display: grid;
-  grid-template-columns: 160px 1fr auto;
+  grid-template-columns: auto 1fr auto;
   align-items: baseline;
   gap: 24px;
   padding: 20px 32px;
@@ -350,9 +350,9 @@ footer {
 @media (max-width: 600px) {
   nav, .month-header, footer { padding: 0 16px; }
   .month-name { font-size: 32px; }
-  .month-year { font-size: 18px; }
+  .month-year { font-size: 32px; }
   .month-btn { font-size: 36px; }
-  .event-row { grid-template-columns: 64px 1fr auto; gap: 10px; padding: 12px 16px; }
+  .event-row { grid-template-columns: auto 1fr auto; gap: 10px; padding: 12px 16px; }
   .event-date-num { font-size: 28px; }
   .event-day { font-size: 13px; }
   .event-title { font-size: 28px; }
