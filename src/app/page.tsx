@@ -129,9 +129,6 @@ export default function Home() {
       <nav>
         <a className="nav-logo" href="#">Bodega</a>
         <span className="nav-address">Kong Oscars Gate 23</span>
-        <ul className="nav-links">
-          <li><a href="/om">Om Bodega</a></li>
-        </ul>
       </nav>
 
       {status === 'ok' && current && (
