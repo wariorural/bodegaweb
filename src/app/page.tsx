@@ -41,7 +41,7 @@ function monthKey(d: Date) {
 function eventClass(title: string) {
   const t = title.toLowerCase();
   if (t.includes('stengt') || t.includes('ferie') || t.includes('påske') || t.includes('jul')) return 'holiday';
-  if (t.includes('lukket') || t.includes('privat')) return 'closed';
+  if (t.includes('lukket selskap') || t.includes('lukket') || t.includes('privat')) return 'closed';
   return 'has-event';
 }
 

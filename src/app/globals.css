@@ -324,7 +324,7 @@ footer {
   padding: 0 var(--pad-x);
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-between;
   z-index: 100;
 }
 
