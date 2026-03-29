@@ -11,6 +11,12 @@
   --bg: #F7F5F0;
   --line: rgba(232, 57, 29, 0.2);
   --footer-h: 56px;
+  --nav-h: 56px;
+  --pad-x: 24px;
+  --size-lg: 66px;
+  --size-md: 52px;
+  --size-sm: 14px;
+  --stroke: 1.5px;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,17 +36,17 @@ nav {
   top: 0;
   z-index: 100;
   background: var(--bg);
-  border-bottom: 1.5px solid var(--red);
+  border-bottom: var(--stroke) solid var(--red);
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: flex-end;
-  padding: 0 32px 10px;
-  height: 56px;
+  padding: 0 var(--pad-x) 10px;
+  height: var(--nav-h);
 }
 
 .nav-logo {
   font-family: 'Neureal', sans-serif;
-  font-size: 14px;
+  font-size: var(--size-sm);
   color: var(--red);
   letter-spacing: 0.02em;
   text-decoration: none;
@@ -48,36 +54,21 @@ nav {
 
 .nav-address {
   font-family: 'Neureal', sans-serif;
-  font-size: 14px;
+  font-size: var(--size-sm);
   color: var(--red);
   letter-spacing: 0.05em;
-  text-transform: uppercase;
-  text-align: center;
 }
-
-.nav-links { display: flex; gap: 32px; list-style: none; justify-content: flex-end; }
-
-.nav-links a {
-  font-family: 'Neureal', sans-serif;
-  font-size: 14px;
-  text-decoration: none;
-  color: var(--red);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  transition: opacity 0.15s;
-}
-.nav-links a:hover { opacity: 0.6; }
 
 /* ─── MONTH HEADER ─── */
 .month-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 var(--pad-x);
   height: 80px;
-  border-bottom: 1.5px solid var(--red);
+  border-bottom: var(--stroke) solid var(--red);
   position: sticky;
-  top: 56px;
+  top: var(--nav-h);
   background: var(--bg);
   z-index: 50;
 }
@@ -90,15 +81,14 @@ nav {
 
 .month-name {
   font-family: 'Neureal', sans-serif;
-  font-size: 52px;
-  text-transform: uppercase;
+  font-size: var(--size-md);
   letter-spacing: 0.04em;
   color: var(--red);
   line-height: 1;
 }
 
 .month-year {
-  font-size: 52px;
+  font-size: var(--size-md);
   color: var(--red);
   letter-spacing: 0.05em;
 }
@@ -108,7 +98,7 @@ nav {
   border: none;
   color: var(--red);
   font-family: 'Neureal', sans-serif;
-  font-size: 52px;
+  font-size: var(--size-md);
   line-height: 1;
   cursor: pointer;
   display: flex;
@@ -132,10 +122,9 @@ nav {
   grid-template-columns: auto 1fr auto;
   align-items: baseline;
   gap: 24px;
-  padding: 20px 32px;
-  border-bottom: 1px solid var(--line);
+  padding: 20px var(--pad-x);
+  border-bottom: var(--stroke) solid var(--line);
   transition: background 0.15s;
-  text-decoration: none;
   color: inherit;
   cursor: default;
 }
@@ -149,14 +138,14 @@ nav {
 .event-date { display: flex; flex-direction: column; }
 
 .event-day {
-  font-size: 14px;
+  font-size: var(--size-sm);
   letter-spacing: 0.05em;
   color: var(--red);
 }
 
 .event-date-num {
   font-family: 'Neureal', sans-serif;
-  font-size: 66px;
+  font-size: var(--size-lg);
   line-height: 1;
   color: var(--red);
 }
@@ -166,16 +155,9 @@ nav {
 
 .event-content { display: flex; flex-direction: column; gap: 2px; }
 
-.event-tag {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--red);
-}
-
 .event-title {
   font-family: 'Neureal', sans-serif;
-  font-size: 66px;
+  font-size: var(--size-lg);
   line-height: 1.0;
   color: var(--black);
 }
@@ -188,14 +170,12 @@ nav {
   max-width: 75%;
 }
 
-.sub-main { font-size: 26px; font-weight: 500; }
-.sub-extra { font-size: 16px; font-weight: 400; color: #666; display: inline; }
+.sub-main { font-size: var(--size-sm); font-weight: 500; }
+.sub-extra { font-size: var(--size-sm); font-weight: 400; color: #666; display: inline; }
 
 .event-badge {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  border: 1px solid #ccc;
+  font-size: var(--size-sm);
+  border: var(--stroke) solid #ccc;
   color: #aaa;
   padding: 2px 7px;
   display: inline-block;
@@ -205,7 +185,7 @@ nav {
 
 .event-time {
   font-family: 'Neureal', sans-serif;
-  font-size: 66px;
+  font-size: var(--size-lg);
   color: var(--red);
   white-space: nowrap;
   text-align: right;
@@ -216,17 +196,17 @@ nav {
 
 /* ─── EMPTY / STATE ─── */
 .empty-month {
-  padding: 64px 32px;
+  padding: 64px var(--pad-x);
   text-align: center;
-  font-size: 20px;
+  font-size: var(--size-sm);
   color: var(--red);
   opacity: 0.35;
 }
 
 .state-msg {
-  padding: 64px 32px;
+  padding: 64px var(--pad-x);
   text-align: center;
-  font-size: 16px;
+  font-size: var(--size-sm);
   color: var(--red);
   opacity: 0.5;
 }
@@ -234,7 +214,7 @@ nav {
 .spinner {
   width: 28px;
   height: 28px;
-  border: 2px solid var(--line);
+  border: var(--stroke) solid var(--line);
   border-top-color: var(--red);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -252,7 +232,7 @@ nav {
   z-index: 200;
   align-items: center;
   justify-content: center;
-  padding: 32px;
+  padding: var(--pad-x);
 }
 
 .modal-overlay.open { display: flex; }
@@ -284,13 +264,12 @@ nav {
 }
 
 .modal-header {
-  padding: 28px 32px 20px;
-  border-bottom: 3px solid var(--red);
+  padding: 28px var(--pad-x) 20px;
+  border-bottom: var(--stroke) solid var(--red);
 }
 
 .modal-daytime {
-  font-size: 14px;
-  text-transform: uppercase;
+  font-size: var(--size-sm);
   letter-spacing: 0.1em;
   color: var(--red);
   margin-bottom: 8px;
@@ -298,15 +277,15 @@ nav {
 
 .modal-title {
   font-family: 'Neureal', sans-serif;
-  font-size: 42px;
+  font-size: var(--size-md);
   line-height: 1.05;
   color: var(--black);
 }
 
 .modal-body {
-  padding: 24px 32px 32px;
+  padding: 20px var(--pad-x) var(--pad-x);
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  font-size: 18px;
+  font-size: var(--size-sm);
   line-height: 1.6;
   color: var(--black);
   white-space: pre-wrap;
@@ -315,15 +294,15 @@ nav {
 .modal-close {
   position: absolute;
   top: 20px;
-  right: 24px;
+  right: var(--pad-x);
   background: none;
   border: none;
   font-family: 'Neureal', sans-serif;
-  font-size: 32px;
+  font-size: var(--size-sm);
   color: var(--red);
   cursor: pointer;
   line-height: 1;
-  padding: 0;
+  padding: 8px;
 }
 
 .modal-close:hover { opacity: 0.6; }
@@ -336,8 +315,8 @@ footer {
   right: 0;
   height: var(--footer-h);
   background: var(--bg);
-  border-top: 1.5px solid var(--red);
-  padding: 0 32px;
+  border-top: var(--stroke) solid var(--red);
+  padding: 0 var(--pad-x);
   display: flex;
   align-items: center;
   justify-content: space-evenly;
@@ -346,7 +325,7 @@ footer {
 
 .footer-link {
   font-family: 'Neureal', sans-serif;
-  font-size: 13px;
+  font-size: var(--size-sm);
   color: var(--red);
   text-decoration: none;
   letter-spacing: 0.02em;
@@ -357,13 +336,12 @@ footer {
 /* ─── RESPONSIVE ─── */
 @media (max-width: 600px) {
   nav, .month-header, footer { padding: 0 16px; }
+  nav { padding-bottom: 10px; }
   .month-name { font-size: 32px; }
   .month-year { font-size: 32px; }
-  .month-btn { font-size: 36px; }
+  .month-btn { font-size: 32px; }
   .event-row { grid-template-columns: auto 1fr auto; gap: 10px; padding: 12px 16px; }
   .event-date-num { font-size: 28px; }
-  .event-day { font-size: 14px; }
   .event-title { font-size: 28px; }
   .event-time { font-size: 28px; }
-  .footer-cta { font-size: 14px; }
 }
