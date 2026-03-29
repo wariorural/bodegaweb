@@ -17,7 +17,6 @@
   --size-md: 52px;
   --size-sm: 14px;
   --stroke: 1.5px;
-  --red-dust: #C8856E;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -131,9 +130,9 @@ nav {
 
 .event-row.has-popup { cursor: pointer; }
 .event-row.has-popup:hover { background: rgba(232, 57, 29, 0.04); }
-.event-row.closed { }
+.event-row.closed { opacity: 0.75; }
 .event-row.closed:hover { background: none; }
-.event-row.holiday { }
+.event-row.holiday { opacity: 0.75; }
 
 .event-date { display: flex; flex-direction: column; }
 
@@ -150,14 +149,6 @@ nav {
   color: var(--red);
 }
 
-.event-row.holiday .event-date-num,
-.event-row.holiday .event-day,
-.event-row.holiday .event-title,
-.event-row.holiday .event-time,
-.event-row.closed .event-date-num,
-.event-row.closed .event-day,
-.event-row.closed .event-title,
-.event-row.closed .event-time { color: var(--red-dust); }
 
 .event-content { display: flex; flex-direction: column; gap: 2px; }
 
