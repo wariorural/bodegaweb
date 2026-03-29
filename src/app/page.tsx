@@ -171,10 +171,10 @@ export default function Home() {
             ? <div className="empty-month">Ingen arrangementer denne måneden</div>
             : current.events.map(({ ev, d }, i) => {
                 const title = ev.summary || 'Arrangement';
-                const organizerMatch = title.match(/\[([^\]]+)\]/);
+                const rawDesc = (ev.description || '').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '').trim();
+                const organizerMatch = rawDesc.match(/\[([^\]]+)\]/);
                 const organizer = organizerMatch ? organizerMatch[1] : null;
-                const cleanTitle = organizer ? title.replace(/\[[^\]]+\]/, '').trim() : title;
-                const desc = (ev.description || '').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '').trim();
+                const desc = organizer ? rawDesc.replace(/\[[^\]]+\]/, '').trim() : rawDesc;
                 const cls = eventClass(title);
                 const dayName = NO_DAYS[d.getDay()];
                 const dateStr = formatDate(d);
@@ -194,7 +194,7 @@ export default function Home() {
 
                 const handleClick = hasPopup ? () => {
                   setModal({
-                    title: cleanTitle,
+                    title,
                     daytime: `${dayName} ${dateStr}${timeStr ? ' · ' + timeStr : ''}`,
                     desc: popupText,
                     organizer,
@@ -213,7 +213,7 @@ export default function Home() {
                       <span className="event-day">{dayName}</span>
                     </div>
                     <div className="event-content">
-                      <span className="event-title">{cleanTitle}</span>
+                      <span className="event-title">{title}</span>
                       {organizer && <span className="event-organizer">{organizer}</span>}
                       {subHtml && <div className="event-subtitle" dangerouslySetInnerHTML={{ __html: subHtml }} />}
                       {cls === 'closed' && <span className="event-badge">Lukket</span>}
