@@ -204,8 +204,8 @@ export default function Home() {
                     onClick={handleClick}
                   >
                     <div className="event-date">
-                      <span className="event-date-num">{dateStr}</span>
                       <span className="event-day">{dayName}</span>
+                      <span className="event-date-num">{dateStr}</span>
                     </div>
                     <div className="event-content">
                       <span className="event-title">{title}</span>
@@ -224,6 +224,7 @@ export default function Home() {
           className="modal-overlay open"
           onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
         >
+          <div className="modal-frame">
           <div className="modal">
             <button className="modal-close" onClick={closeModal}>×</button>
             <div className="modal-header">
@@ -231,6 +232,7 @@ export default function Home() {
               <div className="modal-title">{modal.title}</div>
             </div>
             <div className="modal-body">{modal.desc}</div>
+          </div>
           </div>
         </div>
       )}

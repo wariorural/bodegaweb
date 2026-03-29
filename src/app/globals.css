@@ -143,13 +143,14 @@ nav {
 .event-row.closed:hover { background: none; }
 .event-row.holiday { opacity: 0.4; }
 
-.event-date { display: flex; flex-direction: column; }
+.event-date { display: flex; flex-direction: row; align-items: flex-start; gap: 6px; }
 
 .event-day {
   font-size: 14px;
   letter-spacing: 0.05em;
   color: var(--red);
-  margin-top: 4px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
 }
 
 .event-date-num {
@@ -255,19 +256,29 @@ nav {
 
 .modal-overlay.open { display: flex; }
 
-.modal {
-  background: var(--bg);
-  border: 3px solid var(--red);
+.modal-frame {
+  background: var(--red);
+  padding: 3px;
   max-width: 640px;
   width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
-  position: relative;
   clip-path: polygon(
     20px 0%, calc(100% - 20px) 0%,
     100% 20px, 100% calc(100% - 20px),
     calc(100% - 20px) 100%, 20px 100%,
     0% calc(100% - 20px), 0% 20px
+  );
+}
+
+.modal {
+  background: var(--bg);
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  clip-path: polygon(
+    17px 0%, calc(100% - 17px) 0%,
+    100% 17px, 100% calc(100% - 17px),
+    calc(100% - 17px) 100%, 17px 100%,
+    0% calc(100% - 17px), 0% 17px
   );
 }
 
