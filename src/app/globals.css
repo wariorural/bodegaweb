@@ -64,8 +64,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--pad-x);
-  height: 80px;
+  padding: 16px var(--pad-x);
   border-bottom: var(--stroke) solid var(--red);
   position: sticky;
   top: var(--nav-h);
@@ -122,7 +121,7 @@ nav {
   grid-template-columns: auto 1fr auto;
   align-items: baseline;
   gap: 24px;
-  padding: 20px var(--pad-x);
+  padding: 16px var(--pad-x);
   border-bottom: var(--stroke) solid var(--line);
   transition: background 0.15s;
   color: inherit;
@@ -172,6 +171,16 @@ nav {
 
 .sub-main { font-size: var(--size-sm); font-weight: 500; }
 .sub-extra { font-size: var(--size-sm); font-weight: 400; color: #666; display: inline; }
+
+.event-organizer {
+  font-size: var(--size-sm);
+  color: var(--red);
+  border: var(--stroke) solid var(--red);
+  padding: 1px 6px;
+  display: inline-block;
+  width: fit-content;
+  margin-top: 4px;
+}
 
 .event-badge {
   font-size: var(--size-sm);
