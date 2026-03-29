@@ -13,8 +13,8 @@
   --footer-h: 56px;
   --nav-h: 56px;
   --pad-x: 24px;
-  --size-lg: 66px;
-  --size-md: 52px;
+  --size-lg: clamp(28px, 5vw, 60px);
+  --size-md: clamp(28px, 4vw, 48px);
   --size-sm: 14px;
   --stroke: 1.5px;
 }
