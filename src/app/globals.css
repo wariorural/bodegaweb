@@ -64,7 +64,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px var(--pad-x);
+  padding: 32px var(--pad-x);
   border-bottom: var(--stroke) solid var(--red);
   position: sticky;
   top: var(--nav-h);
@@ -113,7 +113,7 @@ nav {
 .month-btn:disabled:hover { opacity: 1; }
 
 /* ─── CALENDAR ROOT ─── */
-#calendar-root { padding-top: 16px; }
+#calendar-root { padding-top: 0; }
 
 /* ─── EVENT LIST ─── */
 .event-row {

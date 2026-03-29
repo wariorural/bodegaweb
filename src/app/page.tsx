@@ -246,7 +246,7 @@ export default function Home() {
 
       <footer>
         <a href="https://instagram.com/bodega.part.no" target="_blank" rel="noopener noreferrer" className="footer-link">@bodega.part.no</a>
-        <span className="footer-link">Vil du leie Bodega?</span>
+        <span className="footer-link">Leie Bodega?</span>
         <a href="mailto:bodega@part.no" className="footer-link">bodega@part.no</a>
       </footer>
     </>
