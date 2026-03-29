@@ -204,8 +204,8 @@ export default function Home() {
                     onClick={handleClick}
                   >
                     <div className="event-date">
-                      <span className="event-day">{dayName}</span>
                       <span className="event-date-num">{dateStr}</span>
+                      <span className="event-day">{dayName}</span>
                     </div>
                     <div className="event-content">
                       <span className="event-title">{title}</span>
@@ -238,12 +238,9 @@ export default function Home() {
       )}
 
       <footer>
-        <div className="footer-links">
-          <a href="https://instagram.com/bodega.part.no" target="_blank" rel="noopener noreferrer">@bodega.part.no</a>
-        </div>
-        <div className="footer-cta">
-          Vil du leie Bodega? <a href="mailto:bodega@part.no">bodega@part.no</a>
-        </div>
+        <a href="https://instagram.com/bodega.part.no" target="_blank" rel="noopener noreferrer" className="footer-link">@bodega.part.no</a>
+        <span className="footer-link">Vil du leie Bodega?</span>
+        <a href="mailto:bodega@part.no" className="footer-link">bodega@part.no</a>
       </footer>
     </>
   );
