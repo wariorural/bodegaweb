@@ -335,6 +335,7 @@ footer {
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 600px) {
+  :root { --size-sm: 16px; }
   nav, .month-header, footer { padding: 0 16px; }
   nav { padding-bottom: 10px; }
   .month-name { font-size: 32px; }
