@@ -113,7 +113,7 @@ nav {
 .month-btn:disabled:hover { opacity: 1; }
 
 /* ─── CALENDAR ROOT ─── */
-#calendar-root { padding-top: 50px; }
+#calendar-root { padding-top: 16px; }
 
 /* ─── EVENT LIST ─── */
 .event-row {
