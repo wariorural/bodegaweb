@@ -24,6 +24,7 @@ interface PopupData {
   title: string;
   daytime: string;
   desc: string;
+  organizer: string | null;
 }
 
 function formatDate(d: Date) { return `${d.getDate()}.${d.getMonth() + 1}`; }
@@ -170,9 +171,10 @@ export default function Home() {
             ? <div className="empty-month">Ingen arrangementer denne måneden</div>
             : current.events.map(({ ev, d }, i) => {
                 const title = ev.summary || 'Arrangement';
-                const organizerMatch = title.match(/<([^>]+)>/);
+                const decodedTitle = title.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+                const organizerMatch = decodedTitle.match(/<([^>]+)>/);
                 const organizer = organizerMatch ? organizerMatch[1] : null;
-                const cleanTitle = organizer ? title.replace(/<[^>]+>/, '').trim() : title;
+                const cleanTitle = organizer ? decodedTitle.replace(/<[^>]+>/, '').trim() : decodedTitle;
                 const desc = (ev.description || '').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '').trim();
                 const cls = eventClass(title);
                 const dayName = NO_DAYS[d.getDay()];
@@ -196,6 +198,7 @@ export default function Home() {
                     title: cleanTitle,
                     daytime: `${dayName} ${dateStr}${timeStr ? ' · ' + timeStr : ''}`,
                     desc: popupText,
+                    organizer,
                   });
                   document.body.style.overflow = 'hidden';
                 } : undefined;
@@ -234,6 +237,7 @@ export default function Home() {
             <div className="modal-header">
               <div className="modal-daytime">{modal.daytime}</div>
               <div className="modal-title">{modal.title}</div>
+              {modal.organizer && <span className="event-organizer">{modal.organizer}</span>}
             </div>
             <div className="modal-body">{modal.desc}</div>
           </div>
