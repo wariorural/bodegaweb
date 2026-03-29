@@ -344,16 +344,7 @@ footer {
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 600px) {
-  :root { --size-sm: 16px; }
-  nav, footer { padding: 0 16px; }
-  nav { padding-bottom: 10px; }
-  footer { padding-bottom: 10px; }
-  .month-header { padding: 12px 16px; }
-  .month-name { font-size: 32px; }
-  .month-year { font-size: 32px; }
-  .month-btn { font-size: 32px; }
-  .event-row { grid-template-columns: auto 1fr auto; gap: 10px; padding: 12px 16px; }
-  .event-date-num { font-size: 28px; }
-  .event-title { font-size: 28px; }
-  .event-time { font-size: 28px; }
+  :root { --size-sm: 16px; --pad-x: 16px; }
+  .month-header { padding: 12px var(--pad-x); }
+  .event-row { gap: 10px; }
 }
