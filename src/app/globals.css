@@ -35,6 +35,7 @@ nav {
   justify-content: space-between;
   align-items: flex-end;
   padding: 0 32px 10px;
+  height: 56px;
 }
 
 .nav-logo {
@@ -121,6 +122,9 @@ nav {
 .month-btn:hover { opacity: 0.6; }
 .month-btn:disabled { color: var(--line); cursor: default; }
 .month-btn:disabled:hover { opacity: 1; }
+
+/* ─── CALENDAR ROOT ─── */
+#calendar-root { padding-top: 50px; }
 
 /* ─── EVENT LIST ─── */
 .event-row {
