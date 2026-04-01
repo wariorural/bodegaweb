@@ -156,7 +156,7 @@ nav {
 .event-title {
   font-family: 'Neureal', sans-serif;
   font-size: var(--size-lg);
-  line-height: 1.0;
+  line-height: 1.1;
   color: var(--black);
 }
 
@@ -346,5 +346,6 @@ footer {
 @media (max-width: 600px) {
   :root { --size-sm: 16px; --pad-x: 16px; }
   .month-header { padding: 12px var(--pad-x); }
+  .month-btn { min-height: 44px; min-width: 44px; }
   .event-row { gap: 10px; }
 }
