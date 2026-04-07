@@ -185,6 +185,7 @@ nav {
   display: inline-block;
   margin-top: 8px;
   width: fit-content;
+  align-self: center;
 }
 
 .event-time {
