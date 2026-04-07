@@ -38,11 +38,12 @@ function monthKey(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
 }
 
-function eventClass(title: string) {
+function eventClass(title: string, desc = '') {
   const t = title.toLowerCase();
+  const d = desc.toLowerCase();
   if (t.includes('stengt') || t.includes('ferie') || t.includes('påske') || t.includes('jul')) return 'holiday';
-  if (t.includes('[privat')) return 'private';
-  if (t.includes('[lukket')) return 'closed';
+  if (t.includes('[privat') || d.includes('[privat')) return 'private';
+  if (t.includes('[lukket') || d.includes('[lukket')) return 'closed';
   return 'has-event';
 }
 
@@ -181,7 +182,7 @@ export default function Home() {
                 const organizerMatch = rawDesc.match(/\[([^\]]+)\]/);
                 const organizer = organizerMatch ? organizerMatch[1] : null;
                 const desc = organizer ? rawDesc.replace(/\[[^\]]+\]/, '').trim() : rawDesc;
-                const cls = eventClass(rawTitle);
+                const cls = eventClass(rawTitle, rawDesc);
                 const dayName = NO_DAYS[d.getDay()];
                 const dateStr = formatDate(d);
                 const timeStr = ev.start.dateTime ? formatTime(ev.start.dateTime) : null;
