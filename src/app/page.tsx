@@ -179,7 +179,7 @@ export default function Home() {
                 const rawTitle = ev.summary || 'Arrangement';
                 const title = cleanTitle(rawTitle);
                 const rawDesc = (ev.description || '').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '').trim();
-                const organizerMatch = rawDesc.match(/\[([^\]]+)\]/);
+                const organizerMatch = rawDesc.match(/\[(?!privat|lukket)([^\]]+)\]/i);
                 const organizer = organizerMatch ? organizerMatch[1] : null;
                 const desc = organizer ? rawDesc.replace(/\[[^\]]+\]/, '').trim() : rawDesc;
                 const cls = eventClass(rawTitle, rawDesc);
