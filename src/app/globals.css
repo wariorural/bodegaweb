@@ -118,7 +118,7 @@ nav {
 /* ─── EVENT LIST ─── */
 .event-row {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 120px 1fr 120px;
   align-items: baseline;
   gap: 16px;
   padding: 12px var(--pad-x);
@@ -130,8 +130,8 @@ nav {
 
 .event-row.has-popup { cursor: pointer; }
 .event-row.has-popup:hover { background: rgba(232, 57, 29, 0.04); }
-.event-row.closed { opacity: 0.5; color: var(--red); }
-.event-row.closed .event-title { color: var(--red); }
+.event-row.closed { opacity: 0.45; cursor: default; }
+.event-row.closed .event-title { color: var(--black); }
 .event-row.closed:hover { background: none; }
 .event-row.holiday { opacity: 0.75; }
 
@@ -352,7 +352,7 @@ footer {
   .month-name { font-size: 32px; }
   .month-year { font-size: 18px; }
   .month-btn { font-size: 36px; }
-  .event-row { grid-template-columns: 64px 1fr auto; gap: 10px; padding: 12px 16px; }
+  .event-row { grid-template-columns: 64px 1fr auto; gap: 10px; padding: 12px 16px; align-items: start; }
   .event-date-num { font-size: 22px; }
   .event-title { font-size: 36px; text-align: left; }
   .event-time { font-size: 15px; }

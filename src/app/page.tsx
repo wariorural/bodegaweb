@@ -41,8 +41,13 @@ function monthKey(d: Date) {
 function eventClass(title: string) {
   const t = title.toLowerCase();
   if (t.includes('stengt') || t.includes('ferie') || t.includes('påske') || t.includes('jul')) return 'holiday';
-  if (t.includes('lukket selskap') || t.includes('lukket') || t.includes('privat')) return 'closed';
+  if (t.includes('[privat]')) return 'private';
+  if (t.includes('[lukket]')) return 'closed';
   return 'has-event';
+}
+
+function cleanTitle(title: string) {
+  return title.replace(/\[(lukket|privat)\]/gi, '').trim();
 }
 
 function parseSubtitle(raw: string) {
@@ -170,12 +175,13 @@ export default function Home() {
           current.events.length === 0
             ? <div className="empty-month">Ingen arrangementer denne måneden</div>
             : current.events.map(({ ev, d }, i) => {
-                const title = ev.summary || 'Arrangement';
+                const rawTitle = ev.summary || 'Arrangement';
+                const title = cleanTitle(rawTitle);
                 const rawDesc = (ev.description || '').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '').trim();
                 const organizerMatch = rawDesc.match(/\[([^\]]+)\]/);
                 const organizer = organizerMatch ? organizerMatch[1] : null;
                 const desc = organizer ? rawDesc.replace(/\[[^\]]+\]/, '').trim() : rawDesc;
-                const cls = eventClass(title);
+                const cls = eventClass(rawTitle);
                 const dayName = NO_DAYS[d.getDay()];
                 const dateStr = formatDate(d);
                 const timeStr = ev.start.dateTime ? formatTime(ev.start.dateTime) : null;
