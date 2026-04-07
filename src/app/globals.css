@@ -316,9 +316,9 @@ footer {
   height: var(--footer-h);
   background: var(--bg);
   border-top: var(--stroke) solid var(--red);
-  padding: 0 var(--pad-x) 10px;
+  padding: 10px var(--pad-x) 0;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
   z-index: 100;
 }
@@ -350,12 +350,12 @@ footer {
   .month-header { padding: 12px 16px; }
   footer { padding: 0 16px 10px; }
   .month-year { font-size: 4.8vw; }
-  .event-row { grid-template-columns: 17vw 1fr auto; gap: 10px; padding: 12px 16px; align-items: start; }
+  .event-row { grid-template-columns: auto 1fr auto; gap: 10px; padding: 12px 16px; align-items: first baseline; }
   .event-date-num { font-size: 6vw; }
-  .event-title { font-size: 9.5vw; text-align: left; }
-  .event-title-group { align-items: flex-start; }
+  .event-title { font-size: 9.5vw; text-align: center; }
+  .event-title-group { align-items: center; }
   .event-subtitle { max-width: 100%; }
-  .event-time { font-size: 4vw; }
+  .event-time { font-size: 6vw; }
   .event-badge { font-size: 2.5vw; }
   .modal-daytime { font-size: 3.5vw; }
   .modal-title { font-size: 6vw; }

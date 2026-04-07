@@ -41,13 +41,13 @@ function monthKey(d: Date) {
 function eventClass(title: string) {
   const t = title.toLowerCase();
   if (t.includes('stengt') || t.includes('ferie') || t.includes('påske') || t.includes('jul')) return 'holiday';
-  if (t.includes('[privat]')) return 'private';
-  if (t.includes('[lukket]')) return 'closed';
+  if (t.includes('[privat')) return 'private';
+  if (t.includes('[lukket')) return 'closed';
   return 'has-event';
 }
 
 function cleanTitle(title: string) {
-  return title.replace(/\[(lukket|privat)\]/gi, '').trim();
+  return title.replace(/\[(lukket|privat)[^\]]*\]/gi, '').trim();
 }
 
 function parseSubtitle(raw: string) {
