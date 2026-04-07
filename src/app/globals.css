@@ -158,6 +158,7 @@ nav {
   font-size: var(--size-lg);
   line-height: 1.1;
   color: var(--black);
+  text-align: center;
 }
 
 .event-subtitle {
@@ -178,12 +179,15 @@ nav {
 }
 
 .event-badge {
-  font-size: var(--size-sm);
-  border: var(--stroke) solid #ccc;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border: 1px solid #ccc;
   color: #aaa;
-  padding: 2px 7px;
+  background: #f0f0ee;
+  padding: 4px 12px;
   display: inline-block;
-  margin-top: 6px;
+  margin-top: 8px;
   width: fit-content;
 }
 
@@ -344,8 +348,13 @@ footer {
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 600px) {
-  :root { --size-sm: 16px; --pad-x: 16px; }
-  .month-header { padding: 12px var(--pad-x); }
-  .month-btn { min-height: 44px; min-width: 44px; }
-  .event-row { gap: 10px; }
+  nav, .month-header, footer { padding: 0 16px; }
+  .month-name { font-size: 32px; }
+  .month-year { font-size: 18px; }
+  .month-btn { font-size: 36px; }
+  .event-row { grid-template-columns: 64px 1fr auto; gap: 10px; padding: 12px 16px; }
+  .event-date-num { font-size: 22px; }
+  .event-title { font-size: 36px; text-align: left; }
+  .event-time { font-size: 15px; }
+  .footer-cta { font-size: 14px; }
 }

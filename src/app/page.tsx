@@ -189,6 +189,8 @@ export default function Home() {
                   popupText = desc;
                 }
 
+                if (cls === 'private') return null;
+
                 const hasPopup = cls === 'has-event' && !!popupText;
                 const subHtml = subRaw ? parseSubtitle(subRaw) : '';
 
