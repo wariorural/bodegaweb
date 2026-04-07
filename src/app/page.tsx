@@ -221,8 +221,10 @@ export default function Home() {
                       <span className="event-day">{dayName}</span>
                     </div>
                     <div className="event-content">
-                      <span className="event-title">{title}</span>
-                      {organizer && <span className="event-organizer">{organizer}</span>}
+                      <div className="event-title-group">
+                        <span className="event-title">{title}</span>
+                        {organizer && <span className="event-organizer">{organizer}</span>}
+                      </div>
                       {subHtml && <div className="event-subtitle" dangerouslySetInnerHTML={{ __html: subHtml }} />}
                       {cls === 'closed' && <span className="event-badge">Lukket</span>}
                     </div>
