@@ -45,7 +45,6 @@ nav {
 }
 
 .nav-logo {
-  font-family: 'Neureal', sans-serif;
   font-size: var(--size-sm);
   color: var(--red);
   letter-spacing: 0.02em;
@@ -53,7 +52,6 @@ nav {
 }
 
 .nav-address {
-  font-family: 'Neureal', sans-serif;
   font-size: var(--size-sm);
   color: var(--red);
   letter-spacing: 0.05em;
@@ -79,7 +77,6 @@ nav {
 }
 
 .month-name {
-  font-family: 'Neureal', sans-serif;
   font-size: var(--size-md);
   letter-spacing: 0.04em;
   color: var(--red);
@@ -96,7 +93,6 @@ nav {
   background: none;
   border: none;
   color: var(--red);
-  font-family: 'Neureal', sans-serif;
   font-size: var(--size-md);
   line-height: 1;
   cursor: pointer;
@@ -111,9 +107,6 @@ nav {
 .month-btn:hover { opacity: 0.6; }
 .month-btn:disabled { color: var(--line); cursor: default; }
 .month-btn:disabled:hover { opacity: 1; }
-
-/* ─── CALENDAR ROOT ─── */
-#calendar-root { padding-top: 0; }
 
 /* ─── EVENT LIST ─── */
 .event-row {
@@ -130,8 +123,7 @@ nav {
 
 .event-row.has-popup { cursor: pointer; }
 .event-row.has-popup:hover { background: rgba(232, 57, 29, 0.04); }
-.event-row.closed { opacity: 0.45; cursor: default; }
-.event-row.closed .event-title { color: var(--black); }
+.event-row.closed { opacity: 0.45; }
 .event-row.closed:hover { background: none; }
 .event-row.holiday { opacity: 0.75; }
 
@@ -144,18 +136,21 @@ nav {
 }
 
 .event-date-num {
-  font-family: 'Neureal', sans-serif;
   font-size: var(--size-lg);
   line-height: 1;
   color: var(--red);
 }
 
-
 .event-content { display: flex; flex-direction: column; gap: 2px; }
-.event-title-group { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+
+.event-title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
 
 .event-title {
-  font-family: 'Neureal', sans-serif;
   font-size: var(--size-lg);
   line-height: 1.1;
   color: var(--black);
@@ -176,7 +171,6 @@ nav {
 .event-organizer {
   font-size: var(--size-sm);
   color: var(--red);
-  margin-top: 4px;
 }
 
 .event-badge {
@@ -193,13 +187,11 @@ nav {
 }
 
 .event-time {
-  font-family: 'Neureal', sans-serif;
   font-size: var(--size-lg);
   color: var(--red);
   white-space: nowrap;
   text-align: right;
 }
-
 
 /* ─── EMPTY / STATE ─── */
 .empty-month {
@@ -283,7 +275,6 @@ nav {
 }
 
 .modal-title {
-  font-family: 'Neureal', sans-serif;
   font-size: var(--size-md);
   line-height: 1.05;
   color: var(--black);
@@ -304,7 +295,6 @@ nav {
   right: var(--pad-x);
   background: none;
   border: none;
-  font-family: 'Neureal', sans-serif;
   font-size: var(--size-sm);
   color: var(--red);
   cursor: pointer;
@@ -338,7 +328,6 @@ footer {
 }
 
 .footer-link {
-  font-family: 'Neureal', sans-serif;
   font-size: var(--size-sm);
   color: var(--red);
   text-decoration: none;
@@ -349,13 +338,16 @@ footer {
 
 /* ─── RESPONSIVE ─── */
 @media (max-width: 600px) {
-  nav, .month-header, footer { padding: 0 16px; }
+  nav { padding: 0 16px 10px; }
+  .month-header { padding: 12px 16px; }
+  footer { padding: 0 16px 10px; }
   .month-name { font-size: 32px; }
   .month-year { font-size: 18px; }
   .month-btn { font-size: 36px; }
   .event-row { grid-template-columns: 64px 1fr auto; gap: 10px; padding: 12px 16px; align-items: start; }
   .event-date-num { font-size: 22px; }
   .event-title { font-size: 36px; text-align: left; }
+  .event-title-group { align-items: flex-start; }
+  .event-subtitle { max-width: 100%; }
   .event-time { font-size: 15px; }
-  .footer-cta { font-size: 14px; }
 }
