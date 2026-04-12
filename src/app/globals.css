@@ -6,10 +6,10 @@
 }
 
 :root {
-  --red: #E8391D;
-  --black: #111111;
-  --bg: #F7F5F0;
-  --line: rgba(232, 57, 29, 0.2);
+  --red: #F7F5F0;
+  --black: #F7F5F0;
+  --bg: #E8391D;
+  --line: rgba(247, 245, 240, 0.3);
   --footer-h: 56px;
   --nav-h: 56px;
   --pad-x: 24px;
@@ -231,7 +231,7 @@ nav {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(247, 245, 240, 0.92);
+  background: rgba(232, 57, 29, 0.95);
   z-index: 200;
   align-items: center;
   justify-content: center;
