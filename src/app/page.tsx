@@ -183,6 +183,8 @@ export default function Home() {
                 const organizer = organizerMatch ? organizerMatch[1] : null;
                 const desc = organizer ? rawDesc.replace(/\[[^\]]+\]/, '').trim() : rawDesc;
                 const cls = eventClass(rawTitle, rawDesc);
+                const today = new Date();
+                const isToday = cls === 'has-event' && d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
                 const dayName = NO_DAYS[d.getDay()];
                 const dateStr = formatDate(d);
                 const timeStr = ev.start.dateTime ? formatTime(ev.start.dateTime) : null;
@@ -218,7 +220,7 @@ export default function Home() {
                     onClick={handleClick}
                   >
                     <div className="event-date">
-                      <span className="event-date-num">{dateStr}</span>
+                      <span className={`event-date-num${isToday ? ' today' : ''}`}>{dateStr}</span>
                       <span className="event-day">{dayName}</span>
                     </div>
                     <div className="event-content">
