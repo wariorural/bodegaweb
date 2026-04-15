@@ -181,6 +181,13 @@ nav {
   color: var(--red);
 }
 
+.event-meta {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
 .event-badge {
   font-size: 0.85vw;
   text-transform: uppercase;
@@ -190,9 +197,7 @@ nav {
   background: #f0f0ee;
   padding: 4px 12px;
   display: inline-block;
-  margin-top: 8px;
   width: fit-content;
-  align-self: center;
 }
 
 .event-time {
