@@ -225,9 +225,9 @@ export default function Home() {
                       <div className="event-title-group">
                         <span className="event-title">{title}</span>
                         {organizer && <span className="event-organizer">{organizer}</span>}
+                        {cls === 'closed' && <span className="event-badge">Lukket</span>}
                       </div>
                       {subHtml && <div className="event-subtitle" dangerouslySetInnerHTML={{ __html: subHtml }} />}
-                      {cls === 'closed' && <span className="event-badge">Lukket</span>}
                     </div>
                     <div className="event-time">{timeStr || '—'}</div>
                   </div>
