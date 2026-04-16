@@ -121,6 +121,12 @@ nav {
   cursor: default;
 }
 
+.event-row.today { background: var(--red); }
+.event-row.today .event-date-num,
+.event-row.today .event-day,
+.event-row.today .event-title,
+.event-row.today .event-time,
+.event-row.today .event-organizer { color: var(--bg); }
 .event-row.has-popup { cursor: pointer; }
 .event-row.has-popup:hover { background: rgba(232, 57, 29, 0.04); }
 .event-row.closed { opacity: 0.45; }

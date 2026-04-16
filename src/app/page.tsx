@@ -221,11 +221,11 @@ export default function Home() {
                 return (
                   <div
                     key={i}
-                    className={`event-row ${cls} ${hasPopup ? 'has-popup' : ''}`}
+                    className={`event-row ${cls} ${hasPopup ? 'has-popup' : ''} ${isToday ? 'today' : ''}`}
                     onClick={handleClick}
                   >
                     <div className="event-date">
-                      <span className={`event-date-num${isToday ? ' today' : ''}`}>{dateStr}</span>
+                      <span className="event-date-num">{dateStr}</span>
                       <span className="event-day">{dayName}</span>
                     </div>
                     <div className="event-content">
