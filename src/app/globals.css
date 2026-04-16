@@ -129,6 +129,7 @@ nav {
 .event-row.today .event-organizer { color: var(--bg); }
 .event-row.has-popup { cursor: pointer; }
 .event-row.has-popup:hover { background: rgba(232, 57, 29, 0.04); }
+.event-row.today.has-popup:hover { background: var(--red); }
 .event-row.closed { opacity: 0.45; }
 .event-row.closed:hover { background: none; }
 .event-row.holiday { opacity: 0.75; }

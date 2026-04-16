@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY!;
 const CALENDAR_ID = process.env.NEXT_PUBLIC_CALENDAR_ID!;
@@ -91,6 +91,9 @@ export default function Home() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [status, setStatus] = useState<'loading' | 'error' | 'empty' | 'ok'>('loading');
   const [modal, setModal] = useState<PopupData | null>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const monthHeaderRef = useRef<HTMLDivElement>(null);
+  const todayRowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     async function load() {
@@ -123,6 +126,17 @@ export default function Home() {
     load();
   }, []);
 
+  useEffect(() => {
+    if (status !== 'ok') return;
+    const frame = requestAnimationFrame(() => {
+      if (!todayRowRef.current) return;
+      const stickyH = (navRef.current?.offsetHeight ?? 0) + (monthHeaderRef.current?.offsetHeight ?? 0);
+      const top = todayRowRef.current.getBoundingClientRect().top + window.scrollY - stickyH;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [status]);
+
   const closeModal = useCallback(() => {
     setModal(null);
     document.body.style.overflow = '';
@@ -135,16 +149,21 @@ export default function Home() {
   }, [closeModal]);
 
   const current = months[currentIdx];
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const scrollTargetIdx = current
+    ? current.events.findIndex(({ d }) => d >= todayStart)
+    : -1;
 
   return (
     <>
-      <nav>
+      <nav ref={navRef}>
         <a className="nav-logo" href="#">Bodega</a>
         <span className="nav-address">Kong Oscars Gate 23</span>
       </nav>
 
       {status === 'ok' && current && (
-        <div className="month-header">
+        <div className="month-header" ref={monthHeaderRef}>
           <button
             className="month-btn"
             onClick={() => setCurrentIdx(i => i - 1)}
@@ -188,8 +207,7 @@ export default function Home() {
                 const organizer = organizerMatch ? organizerMatch[1] : null;
                 const desc = organizer ? rawDesc.replace(/\[[^\]]+\]/, '').trim() : rawDesc;
                 const cls = eventClass(rawTitle, rawDesc);
-                const today = new Date();
-                const isToday = cls === 'has-event' && d.getDate() === today.getDate() && d.getMonth() === today.getMonth() && d.getFullYear() === today.getFullYear();
+                const isToday = cls === 'has-event' && d.getDate() === todayStart.getDate() && d.getMonth() === todayStart.getMonth() && d.getFullYear() === todayStart.getFullYear();
                 const dayName = NO_DAYS[d.getDay()];
                 const dateStr = formatDate(d);
                 const timeStr = ev.start.dateTime ? formatTime(ev.start.dateTime) : null;
@@ -221,6 +239,7 @@ export default function Home() {
                 return (
                   <div
                     key={i}
+                    ref={i === scrollTargetIdx ? todayRowRef : undefined}
                     className={`event-row ${cls} ${hasPopup ? 'has-popup' : ''} ${isToday ? 'today' : ''}`}
                     onClick={handleClick}
                   >
