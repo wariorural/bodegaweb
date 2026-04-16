@@ -94,22 +94,27 @@ export default function Home() {
 
   useEffect(() => {
     async function load() {
-      const now = new Date().toISOString();
+      const past = new Date();
+      past.setMonth(past.getMonth() - 3);
       const future = new Date();
       future.setMonth(future.getMonth() + 6);
       const calId = encodeURIComponent(CALENDAR_ID);
       const url = `https://www.googleapis.com/calendar/v3/calendars/${calId}/events`
         + `?key=${API_KEY}`
-        + `&timeMin=${now}`
+        + `&timeMin=${past.toISOString()}`
         + `&timeMax=${future.toISOString()}`
         + `&orderBy=startTime`
         + `&singleEvents=true`
-        + `&maxResults=200`;
+        + `&maxResults=500`;
       try {
         const data = await fetchWithFallback(url);
         const items = (data.items || []).filter((ev: CalEvent) => ev.start.dateTime);
         if (!items.length) { setStatus('empty'); return; }
-        setMonths(groupByMonth(items));
+        const grouped = groupByMonth(items);
+        const todayKey = monthKey(new Date());
+        const idx = grouped.findIndex(m => m.key === todayKey);
+        setMonths(grouped);
+        setCurrentIdx(idx >= 0 ? idx : 0);
         setStatus('ok');
       } catch {
         setStatus('error');

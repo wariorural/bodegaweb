@@ -13,6 +13,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="no">
+      <head>
+        <meta name="format-detection" content="telephone=no, date=no, address=no" />
+      </head>
       <body>{children}</body>
     </html>
   );
