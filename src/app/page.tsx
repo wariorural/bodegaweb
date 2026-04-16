@@ -51,6 +51,10 @@ function cleanTitle(title: string) {
   return title.replace(/\[(lukket|privat)[^\]]*\]/gi, '').trim();
 }
 
+function linkify(text: string) {
+  return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+}
+
 function parseSubtitle(raw: string) {
   if (!raw?.trim()) return '';
   const parts = raw.split(/\/\/([^/]+)\//);
@@ -277,7 +281,7 @@ export default function Home() {
               <div className="modal-title">{modal.title}</div>
               {modal.organizer && <span className="event-organizer">{modal.organizer}</span>}
             </div>
-            <div className="modal-body">{modal.desc}</div>
+            <div className="modal-body" dangerouslySetInnerHTML={{ __html: linkify(modal.desc) }} />
           </div>
           </div>
         </div>
