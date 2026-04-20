@@ -252,7 +252,9 @@ nav {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(232, 57, 29, 0.95);
+  background: rgba(232, 57, 29, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   z-index: 200;
   align-items: center;
   justify-content: center;
@@ -292,6 +294,11 @@ nav {
   border-bottom: var(--stroke) solid var(--red);
 }
 
+.modal-header .event-organizer {
+  display: block;
+  margin-top: 10px;
+}
+
 .modal-daytime {
   font-size: 1.5vw;
   letter-spacing: 0.1em;
@@ -300,7 +307,7 @@ nav {
 }
 
 .modal-title {
-  font-size: var(--size-md);
+  font-size: var(--size-lg);
   line-height: 1.05;
   color: var(--black);
 }
@@ -308,7 +315,7 @@ nav {
 .modal-body {
   padding: 20px var(--pad-x) var(--pad-x);
   font-family: 'Neureal', 'Arial', sans-serif;
-  font-size: 1.8vw;
+  font-size: 2.2vw;
   line-height: 1.6;
   color: var(--black);
   white-space: pre-wrap;
@@ -386,6 +393,6 @@ footer {
   .event-time { font-size: 6vw; }
   .event-badge { font-size: 2.5vw; }
   .modal-daytime { font-size: 3.5vw; }
-  .modal-title { font-size: 6vw; }
-  .modal-body { font-size: 4vw; }
+  .modal-title { font-size: 9.5vw; }
+  .modal-body { font-size: 4.5vw; }
 }
