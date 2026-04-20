@@ -49,7 +49,13 @@ function monthKey(d: Date) {
 }
 
 function parseFields(raw: string): ParsedFields {
-  const cleaned = (raw || '').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '').trim();
+  const cleaned = (raw || '')
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/p>/gi, '\n')
+    .replace(/<\/div>/gi, '\n')
+    .replace(/<[^>]*>/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
   const result: ParsedFields = { host: '', arrangør: '', undertittel: '', lukket: '', privat: false, info: '' };
 
   let currentKey: string | null = null;
