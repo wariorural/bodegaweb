@@ -20,11 +20,21 @@ interface MonthGroup {
   events: { ev: CalEvent; d: Date }[];
 }
 
+interface ParsedFields {
+  host: string;
+  arrangør: string;
+  undertittel: string;
+  lukket: string;
+  privat: boolean;
+  info: string;
+}
+
 interface PopupData {
   title: string;
   daytime: string;
-  desc: string;
-  organizer: string | null;
+  info: string;
+  host: string;
+  arrangør: string;
 }
 
 function formatDate(d: Date) { return `${d.getDate()}.${d.getMonth() + 1}`; }
@@ -38,33 +48,48 @@ function monthKey(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
 }
 
-function eventClass(title: string, desc = '') {
+function parseFields(raw: string): ParsedFields {
+  const cleaned = (raw || '').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '').trim();
+  const result: ParsedFields = { host: '', arrangør: '', undertittel: '', lukket: '', privat: false, info: '' };
+
+  let currentKey: string | null = null;
+  let currentLines: string[] = [];
+
+  const commit = () => {
+    if (!currentKey) return;
+    const value = currentLines.join('\n').trim();
+    if (currentKey === 'host' && value) result.host = value;
+    else if (currentKey === 'arrangør' && value) result.arrangør = value;
+    else if (currentKey === 'undertittel' && value) result.undertittel = value;
+    else if (currentKey === 'lukket' && value) result.lukket = value;
+    else if (currentKey === 'privat' && value) result.privat = true;
+    else if (currentKey === 'info' && value) result.info = value;
+    currentKey = null;
+    currentLines = [];
+  };
+
+  for (const line of cleaned.split('\n')) {
+    const match = line.match(/^\[([^\]]+)\]=(.*)$/);
+    if (match) {
+      commit();
+      currentKey = match[1].toLowerCase().trim();
+      const firstLine = match[2].trim();
+      if (firstLine) currentLines.push(firstLine);
+    } else if (currentKey !== null) {
+      currentLines.push(line);
+    }
+  }
+  commit();
+
+  return result;
+}
+
+function eventClass(title: string, parsed: ParsedFields) {
   const t = title.toLowerCase();
-  const d = desc.toLowerCase();
   if (t.includes('stengt') || t.includes('ferie') || t.includes('påske') || t.includes('jul')) return 'holiday';
-  if (t.includes('[privat') || d.includes('[privat')) return 'private';
-  if (t.includes('[lukket') || d.includes('[lukket')) return 'closed';
+  if (parsed.privat) return 'private';
+  if (parsed.lukket !== '') return 'closed';
   return 'has-event';
-}
-
-function cleanTitle(title: string) {
-  return title.replace(/\[(lukket|privat)[^\]]*\]/gi, '').trim();
-}
-
-function linkify(text: string) {
-  return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
-}
-
-function parseSubtitle(raw: string) {
-  if (!raw?.trim()) return '';
-  const parts = raw.split(/\/\/([^/]+)\//);
-  return parts.map((part, i) => {
-    if (!part.trim()) return '';
-    const escaped = part.trim().replace(/\n/g, '<br>');
-    return i % 2 === 0
-      ? `<span class="sub-extra">${escaped}</span>`
-      : `<span class="sub-main">${escaped}</span>`;
-  }).join('');
 }
 
 function groupByMonth(events: CalEvent[]): MonthGroup[] {
@@ -204,38 +229,25 @@ export default function Home() {
           current.events.length === 0
             ? <div className="empty-month">Ingen arrangementer denne måneden</div>
             : current.events.map(({ ev, d }, i) => {
-                const rawTitle = ev.summary || 'Arrangement';
-                const title = cleanTitle(rawTitle);
-                const rawDesc = (ev.description || '').replace(/<br\s*\/?>/gi, '\n').replace(/<[^>]*>/g, '').trim();
-                const organizerMatch = rawDesc.match(/\[(?!privat|lukket)([^\]]+)\]/i);
-                const organizer = organizerMatch ? organizerMatch[1] : null;
-                const desc = organizer ? rawDesc.replace(/\[[^\]]+\]/, '').trim() : rawDesc;
-                const cls = eventClass(rawTitle, rawDesc);
+                const title = ev.summary || 'Arrangement';
+                const parsed = parseFields(ev.description || '');
+                const cls = eventClass(title, parsed);
                 const isToday = cls === 'has-event' && d.getDate() === todayStart.getDate() && d.getMonth() === todayStart.getMonth() && d.getFullYear() === todayStart.getFullYear();
                 const dayName = NO_DAYS[d.getDay()];
                 const dateStr = formatDate(d);
                 const timeStr = ev.start.dateTime ? formatTime(ev.start.dateTime) : null;
 
-                let subRaw = '', popupText = '';
-                if (desc.includes('///')) {
-                  const sepIdx = desc.indexOf('///');
-                  subRaw = desc.slice(0, sepIdx).trim();
-                  popupText = desc.slice(sepIdx + 3).trim();
-                } else {
-                  popupText = desc;
-                }
-
                 if (cls === 'private') return null;
 
-                const hasPopup = cls === 'has-event' && !!popupText;
-                const subHtml = subRaw ? parseSubtitle(subRaw) : '';
+                const hasPopup = cls === 'has-event' && !!parsed.info;
 
                 const handleClick = hasPopup ? () => {
                   setModal({
                     title,
                     daytime: `${dayName} ${dateStr}${timeStr ? ' · ' + timeStr : ''}`,
-                    desc: popupText,
-                    organizer,
+                    info: parsed.info,
+                    host: parsed.host,
+                    arrangør: parsed.arrangør,
                   });
                   document.body.style.overflow = 'hidden';
                 } : undefined;
@@ -255,11 +267,12 @@ export default function Home() {
                       <div className="event-title-group">
                         <span className="event-title">{title}</span>
                         <div className="event-meta">
-                          {organizer && <span className="event-organizer">{organizer}</span>}
-                          {cls === 'closed' && <span className="event-badge">Lukket</span>}
+                          {parsed.host && <span className="event-organizer">{parsed.host}</span>}
+                          {parsed.arrangør && <span className="event-organizer">{parsed.arrangør}</span>}
+                          {parsed.lukket && <span className="event-badge">{parsed.lukket}</span>}
                         </div>
                       </div>
-                      {subHtml && <div className="event-subtitle" dangerouslySetInnerHTML={{ __html: subHtml }} />}
+                      {parsed.undertittel && <div className="event-subtitle">{parsed.undertittel}</div>}
                     </div>
                     <div className="event-time">{timeStr || '—'}</div>
                   </div>
@@ -279,9 +292,10 @@ export default function Home() {
             <div className="modal-header">
               <div className="modal-daytime">{modal.daytime}</div>
               <div className="modal-title">{modal.title}</div>
-              {modal.organizer && <span className="event-organizer">{modal.organizer}</span>}
+              {modal.host && <span className="event-organizer">{modal.host}</span>}
+              {modal.arrangør && <span className="event-organizer">{modal.arrangør}</span>}
             </div>
-            <div className="modal-body" dangerouslySetInnerHTML={{ __html: linkify(modal.desc) }} />
+            <div className="modal-body">{modal.info}</div>
           </div>
           </div>
         </div>
