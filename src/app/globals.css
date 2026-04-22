@@ -15,6 +15,7 @@
   --pad-x: 24px;
   --size-lg: 5vw;
   --size-md: 4vw;
+  --size-xs: 1.8vw;
   --size-sm: 1.2vw;
   --stroke: 1.5px;
 }
@@ -67,7 +68,7 @@ nav {
   position: sticky;
   top: var(--nav-h);
   background: var(--bg);
-  z-index: 50;
+  z-index: 99;
 }
 
 .month-label {
@@ -177,7 +178,7 @@ nav {
   color: var(--black);
   margin-top: 4px;
   line-height: 1.3;
-  font-size: var(--size-sm);
+  font-size: var(--size-xs);
   max-width: 75%;
   text-align: center;
 }
@@ -186,7 +187,7 @@ nav {
 .sub-extra { font-weight: 400; color: #666; display: inline; }
 
 .event-organizer {
-  font-size: var(--size-sm);
+  font-size: var(--size-xs);
   color: var(--red);
 }
 
@@ -298,10 +299,11 @@ nav {
 .modal-header .event-organizer {
   display: block;
   margin-top: 10px;
+  font-size: var(--size-sm);
 }
 
 .modal-daytime {
-  font-size: 1.5vw;
+  font-size: var(--size-xs);
   letter-spacing: 0.1em;
   color: var(--red);
   margin-bottom: 8px;
@@ -316,7 +318,7 @@ nav {
 .modal-body {
   padding: 20px var(--pad-x) var(--pad-x);
   font-family: 'Neureal', 'Arial', sans-serif;
-  font-size: 2.2vw;
+  font-size: 2.0vw;
   line-height: 1.6;
   color: var(--black);
   white-space: pre-wrap;
@@ -380,13 +382,13 @@ footer {
   :root {
     --size-lg: 9.5vw;
     --size-md: 8.5vw;
+    --size-xs: 4.5vw;
     --size-sm: 3.5vw;
   }
   nav { padding: 10px 16px; }
   .month-header { padding: 12px 16px; }
   footer { padding: 20px 16px; }
-  .month-year { font-size: 4.8vw; }
-  .event-row { grid-template-columns: auto 1fr auto; gap: 10px; padding: 12px 16px; align-items: first baseline; }
+  .event-row { grid-template-columns: auto 1fr auto; gap: 10px; padding: 12px 16px; align-items: start; }
   .event-date-num { font-size: 6vw; }
   .event-title { font-size: 9.5vw; text-align: center; }
   .event-title-group { align-items: center; }
