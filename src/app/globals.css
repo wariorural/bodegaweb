@@ -389,6 +389,7 @@ footer {
   .month-header { padding: 12px 16px; }
   footer { padding: 20px 16px; }
   .event-row { grid-template-columns: auto 1fr auto; gap: 10px; padding: 12px 16px; align-items: first baseline; }
+  .event-content { align-items: stretch; }
   .event-date-num { font-size: 6vw; }
   .event-title { font-size: 9.5vw; text-align: center; }
   .event-title-group { align-items: center; }
