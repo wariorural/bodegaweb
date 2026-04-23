@@ -90,6 +90,10 @@ function parseFields(raw: string): ParsedFields {
   return result;
 }
 
+function linkify(text: string) {
+  return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+}
+
 function eventClass(title: string, parsed: ParsedFields) {
   const t = title.toLowerCase();
   if (t.includes('stengt') || t.includes('ferie') || t.includes('påske') || t.includes('jul')) return 'holiday';
@@ -301,7 +305,7 @@ export default function Home() {
               {modal.host && <span className="event-organizer">{modal.host}</span>}
               {modal.arrangør && <span className="event-organizer">{modal.arrangør}</span>}
             </div>
-            <div className="modal-body">{modal.info}</div>
+            <div className="modal-body" dangerouslySetInnerHTML={{ __html: linkify(modal.info) }} />
           </div>
           </div>
         </div>
