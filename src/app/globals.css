@@ -393,7 +393,7 @@ footer {
   .event-date-num { font-size: 6vw; }
   .event-title { font-size: 9.5vw; text-align: center; }
   .event-title-group { align-items: center; }
-  .event-subtitle { max-width: 100%; }
+  .event-subtitle { max-width: 100%; text-align: center; }
   .event-time { font-size: 6vw; }
   .event-badge { font-size: 2.5vw; }
   .modal-daytime { font-size: 3.5vw; }
