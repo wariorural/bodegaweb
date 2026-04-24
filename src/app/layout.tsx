@@ -4,6 +4,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Bodega",
   description: "Bodega — Kong Oscars Gate 23",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
