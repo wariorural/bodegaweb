@@ -383,13 +383,13 @@ footer {
     --pad-x: 16px;
   }
   .month-header { padding: 12px var(--pad-x); }
-  .event-row { grid-template-columns: auto 1fr auto; column-gap: 10px; padding: 12px var(--pad-x); }
+  .event-row { grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 10px; padding: 12px var(--pad-x); }
   .event-content { align-items: stretch; }
-  .event-date-num { font-size: 6vw; }
-  .event-title { font-size: var(--size-md); }
+  .event-date-num { font-size: 7vw; }
+  .event-title { font-size: 7vw; }
   .event-title-group { align-items: center; }
   .event-subtitle { max-width: 100%; text-align: center; }
-  .event-time { font-size: 6vw; }
+  .event-time { font-size: 7vw; }
   .event-badge { font-size: 2.5vw; }
   .modal-daytime { font-size: var(--size-sm); }
 }
