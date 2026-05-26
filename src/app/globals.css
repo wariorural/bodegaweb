@@ -114,7 +114,7 @@ nav {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: first baseline;
-  gap: 16px;
+  column-gap: 16px;
   padding: 12px var(--pad-x);
   border-bottom: var(--stroke) solid var(--line);
   transition: background 0.15s;
@@ -122,12 +122,16 @@ nav {
   cursor: default;
 }
 
+.event-row .event-date,
+.event-row .event-content,
+.event-row .event-time { grid-row: 2; }
+
 .event-row.today { background: var(--red); }
 .event-row.today .event-date-num,
 .event-row.today .event-day,
 .event-row.today .event-title,
 .event-row.today .event-time,
-.event-row.today .event-organizer,
+.event-row.today .event-overtitle,
 .event-row.today .event-subtitle { color: var(--bg); }
 .event-row.has-popup { cursor: pointer; }
 .event-row.has-popup:hover { background: rgba(232, 57, 29, 0.04); }
@@ -166,6 +170,16 @@ nav {
   text-align: center;
 }
 
+.event-overtitle {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  margin-bottom: 2px;
+  font-size: var(--size-xs);
+  color: var(--red);
+  line-height: 1.3;
+  text-align: center;
+}
+
 .event-subtitle {
   font-family: 'Neureal', 'Arial', sans-serif;
   color: var(--black);
@@ -174,19 +188,6 @@ nav {
   font-size: var(--size-xs);
   max-width: 75%;
   text-align: center;
-}
-
-.event-organizer {
-  font-size: var(--size-xs);
-  color: var(--red);
-}
-
-.event-meta {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
 }
 
 .event-badge {
@@ -286,10 +287,12 @@ nav {
   border-bottom: var(--stroke) solid var(--red);
 }
 
-.modal-header .event-organizer {
-  display: block;
-  margin-top: 10px;
+.modal-header .event-overtitle {
+  position: static;
+  transform: none;
+  margin: 0 0 6px;
   font-size: var(--size-sm);
+  text-align: left;
 }
 
 .modal-daytime {
@@ -377,7 +380,7 @@ footer {
     --pad-x: 16px;
   }
   .month-header { padding: 12px var(--pad-x); }
-  .event-row { grid-template-columns: auto 1fr auto; gap: 10px; padding: 12px var(--pad-x); }
+  .event-row { grid-template-columns: auto 1fr auto; column-gap: 10px; padding: 12px var(--pad-x); }
   .event-content { align-items: stretch; }
   .event-date-num { font-size: 6vw; }
   .event-title-group { align-items: center; }

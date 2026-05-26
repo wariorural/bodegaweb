@@ -41,9 +41,9 @@ Repo: wariorural/bodegaweb
 - `has-event`: alt annet → normal visning, popup hvis beskrivelse har innhold
 
 ## Google Calendar-konvensjoner
-- **Arrangør**: skriv `[Arrangørnavn]` i beskrivelsen → vises som liten rød tekst under tittelen
-- **Popup-innhold**: legg til `///` i beskrivelsen — tekst etter `///` vises i popup
-- **Subtitle**: bruk `//Tekst//` i beskrivelsen (før `///`) for undertittel-formatering
+- **Overtittel**: skriv `[Overtittel]=DJ Kleppe` i beskrivelsen → vises som liten rød tekst over tittelen. `[Host]` og `[Arrangør]` leses også som overtittel (bakoverkompat).
+- **Undertittel**: `[Undertittel]=Kort beskrivelse` → liten svart tekst under tittelen
+- **Popup-innhold**: `[Info]=...` i beskrivelsen — innholdet vises i popup når raden klikkes
 
 ## Komponenter
 - `src/app/page.tsx` — hele appen (client component)

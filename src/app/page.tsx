@@ -21,8 +21,7 @@ interface MonthGroup {
 }
 
 interface ParsedFields {
-  host: string;
-  arrangør: string;
+  overtittel: string;
   undertittel: string;
   lukket: string;
   privat: boolean;
@@ -33,8 +32,7 @@ interface PopupData {
   title: string;
   daytime: string;
   info: string;
-  host: string;
-  arrangør: string;
+  overtittel: string;
 }
 
 function formatDate(d: Date) { return `${d.getDate()}.${d.getMonth() + 1}`; }
@@ -56,7 +54,7 @@ function parseFields(raw: string): ParsedFields {
     .replace(/<[^>]*>/g, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
-  const result: ParsedFields = { host: '', arrangør: '', undertittel: '', lukket: '', privat: false, info: '' };
+  const result: ParsedFields = { overtittel: '', undertittel: '', lukket: '', privat: false, info: '' };
 
   let currentKey: string | null = null;
   let currentLines: string[] = [];
@@ -64,8 +62,7 @@ function parseFields(raw: string): ParsedFields {
   const commit = () => {
     if (!currentKey) return;
     const value = currentLines.join('\n').trim();
-    if (currentKey === 'host' && value) result.host = value;
-    else if (currentKey === 'arrangør' && value) result.arrangør = value;
+    if ((currentKey === 'overtittel' || currentKey === 'host' || currentKey === 'arrangør') && value && !result.overtittel) result.overtittel = value;
     else if (currentKey === 'undertittel' && value) result.undertittel = value;
     else if (currentKey === 'lukket' && value) result.lukket = value;
     else if (currentKey === 'privat' && value) result.privat = true;
@@ -256,8 +253,7 @@ export default function Home() {
                     title,
                     daytime: `${dayName} ${dateStr}${timeStr ? ' · ' + timeStr : ''}`,
                     info: parsed.info,
-                    host: parsed.host,
-                    arrangør: parsed.arrangør,
+                    overtittel: parsed.overtittel,
                   });
                   document.body.style.overflow = 'hidden';
                 } : undefined;
@@ -269,6 +265,7 @@ export default function Home() {
                     className={`event-row ${cls} ${hasPopup ? 'has-popup' : ''} ${isToday ? 'today' : ''}`}
                     onClick={handleClick}
                   >
+                    {parsed.overtittel && <div className="event-overtitle">{parsed.overtittel}</div>}
                     <div className="event-date">
                       <span className="event-date-num">{dateStr}</span>
                       <span className="event-day">{dayName}</span>
@@ -276,11 +273,7 @@ export default function Home() {
                     <div className="event-content">
                       <div className="event-title-group">
                         <span className="event-title">{title}</span>
-                        <div className="event-meta">
-                          {parsed.host && <span className="event-organizer">{parsed.host}</span>}
-                          {parsed.arrangør && <span className="event-organizer">{parsed.arrangør}</span>}
-                          {parsed.lukket && <span className="event-badge">{parsed.lukket}</span>}
-                        </div>
+                        {parsed.lukket && <span className="event-badge">{parsed.lukket}</span>}
                       </div>
                       {parsed.undertittel && <div className="event-subtitle">{parsed.undertittel}</div>}
                     </div>
@@ -301,9 +294,8 @@ export default function Home() {
             <button className="modal-close" onClick={closeModal}>×</button>
             <div className="modal-header">
               <div className="modal-daytime">{modal.daytime}</div>
+              {modal.overtittel && <div className="event-overtitle modal-overtitle">{modal.overtittel}</div>}
               <div className="modal-title">{modal.title}</div>
-              {modal.host && <span className="event-organizer">{modal.host}</span>}
-              {modal.arrangør && <span className="event-organizer">{modal.arrangør}</span>}
             </div>
             <div className="modal-body" dangerouslySetInnerHTML={{ __html: linkify(modal.info) }} />
           </div>
