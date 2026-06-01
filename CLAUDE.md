@@ -15,7 +15,7 @@ Offentlig kalenderside for Bodega bar (Kong Oscars Gate 23, Bergen). Siden er li
 
 ## Deploy
 
-Push til `main` → auto-deploy. URL: `dev1.part.no`. Forvent noen sekunders delay.
+Push til `main` → auto-deploy. URL: `bodega.part.no`. Forvent noen sekunders delay.
 
 ```bash
 git push origin main
@@ -62,6 +62,10 @@ Events med disse taggene i tittelen behandles spesielt:
 
 Brackets strippes fra visningstittel via `cleanTitle()`.
 
+> **NB — to apper deler kalenderen:** `generators/bodegenerator` henter fra samme Google
+> Calendar og tolker samme `[Felt]=verdi`-konvensjon i sin egen `parseFields`. Endrer du
+> feltnavn eller konvensjon her, oppdatér også `generators/bodegenerator/lib/calendar.ts`.
+
 ## UX-prinsipper (relevante for dette prosjektet)
 
 - **Baseline-alignment**: dato, tittel og klokkeslett skal alltid flukter på første tekstlinje (`align-items: first baseline`)
@@ -70,3 +74,12 @@ Brackets strippes fra visningstittel via `cleanTitle()`.
 - **Mobil**: `align-items: start` på event-rader, tittel venstrestilt
 - **Touch-targets**: interaktive elementer minimum 44px
 - Sjekk alltid mobil (375px) og desktop (1440px) ved layout-endringer
+
+## Arbeidsregler
+
+- Les hele filen før du redigerer. Planlegg alle endringer, gjør deretter ÉN komplett redigering. Har du redigert en fil 3+ ganger, stopp og les kravene på nytt.
+- Dobbeltsjekk resultatet før du presenterer det. Verifiser at endringene faktisk svarer på det som ble spurt om.
+- Når brukeren korrigerer deg, stopp og les meldingen på nytt. Gjengi hva de ba om og bekreft før du fortsetter.
+- Hvert par turer, les den opprinnelige forespørselen på nytt for å unngå å miste målet.
+- Etter 2 mislykkede forsøk på rad, stopp og legg om tilnærmingen helt. Forklar hva som feilet og prøv en annen strategi.
+- Når du sitter fast, oppsummer hva du har prøvd og spør brukeren om veiledning i stedet for å prøve det samme igjen.
