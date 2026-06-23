@@ -195,7 +195,7 @@ export default function Home() {
     <>
       <nav ref={navRef}>
         <a className="nav-logo" href="#">Bodega</a>
-        <span className="nav-address">Kong Oscars Gate 23</span>
+        <span className="nav-address">Kong Oscars gate 23</span>
       </nav>
 
       {status === 'ok' && current && (
