@@ -66,6 +66,11 @@ Brackets strippes fra visningstittel via `cleanTitle()`.
 > Calendar og tolker samme `[Felt]=verdi`-konvensjon i sin egen `parseFields`. Endrer du
 > feltnavn eller konvensjon her, oppdatér også `generators/bodegenerator/lib/calendar.ts`.
 
+> **`[bilde]=URL`** i event-beskrivelsen viser et bilde øverst i popupen (`parseFields` →
+> `.modal-image`). Bodega-web viser bevisst *ikke* noe default-bilde (`DEFAULT_BILDE = ''`) —
+> kun events med egen `[bilde]=` får bilde. Bodegenerator publiserer slike URL-er, og den
+> eksterne siden gaari.no plukker opp samme felt (og bruker default-bildet der).
+
 ## UX-prinsipper (relevante for dette prosjektet)
 
 - **Baseline-alignment**: dato, tittel og klokkeslett skal alltid flukter på første tekstlinje (`align-items: first baseline`)

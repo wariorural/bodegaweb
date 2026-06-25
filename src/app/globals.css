@@ -290,6 +290,14 @@ nav {
   border-bottom: var(--stroke) solid var(--red);
 }
 
+.modal-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-bottom: var(--stroke) solid var(--red);
+}
+
 .modal-header .event-overtitle {
   position: static;
   transform: none;

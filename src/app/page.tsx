@@ -5,6 +5,10 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY!;
 const CALENDAR_ID = process.env.NEXT_PUBLIC_CALENDAR_ID!;
 
+// Bodega-web viser bevisst IKKE et fallback-bilde — kun events med egen [bilde]=
+// får bilde i popupen. (Default-bildet er for den eksterne siden gaari.no.)
+const DEFAULT_BILDE = '';
+
 const NO_DAYS = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag'];
 const NO_MONTHS = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'];
 
@@ -26,6 +30,7 @@ interface ParsedFields {
   lukket: string;
   privat: boolean;
   info: string;
+  bilde: string;
 }
 
 interface PopupData {
@@ -33,6 +38,7 @@ interface PopupData {
   daytime: string;
   info: string;
   overtittel: string;
+  bilde: string;
 }
 
 function formatDate(d: Date) { return `${d.getDate()}.${d.getMonth() + 1}`; }
@@ -54,7 +60,7 @@ function parseFields(raw: string): ParsedFields {
     .replace(/<[^>]*>/g, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
-  const result: ParsedFields = { overtittel: '', undertittel: '', lukket: '', privat: false, info: '' };
+  const result: ParsedFields = { overtittel: '', undertittel: '', lukket: '', privat: false, info: '', bilde: '' };
 
   let currentKey: string | null = null;
   let currentLines: string[] = [];
@@ -67,6 +73,7 @@ function parseFields(raw: string): ParsedFields {
     else if (currentKey === 'lukket' && value) result.lukket = value;
     else if (currentKey === 'privat' && value) result.privat = true;
     else if (currentKey === 'info' && value) result.info = value;
+    else if (currentKey === 'bilde' && value) result.bilde = value;
     currentKey = null;
     currentLines = [];
   };
@@ -246,7 +253,7 @@ export default function Home() {
 
                 if (cls === 'private') return null;
 
-                const hasPopup = cls === 'has-event' && !!parsed.info;
+                const hasPopup = cls === 'has-event' && (!!parsed.info || !!parsed.bilde);
 
                 const handleClick = hasPopup ? () => {
                   setModal({
@@ -254,6 +261,7 @@ export default function Home() {
                     daytime: `${dayName} ${dateStr}${timeStr ? ' · ' + timeStr : ''}`,
                     info: parsed.info,
                     overtittel: parsed.overtittel,
+                    bilde: parsed.bilde,
                   });
                   document.body.style.overflow = 'hidden';
                 } : undefined;
@@ -297,7 +305,12 @@ export default function Home() {
               {modal.overtittel && <div className="event-overtitle modal-overtitle">{modal.overtittel}</div>}
               <div className="modal-title">{modal.title}</div>
             </div>
-            <div className="modal-body" dangerouslySetInnerHTML={{ __html: linkify(modal.info) }} />
+            {(modal.bilde || DEFAULT_BILDE) && (
+              <img className="modal-image" src={modal.bilde || DEFAULT_BILDE} alt="" />
+            )}
+            {modal.info && (
+              <div className="modal-body" dangerouslySetInnerHTML={{ __html: linkify(modal.info) }} />
+            )}
           </div>
           </div>
         </div>
