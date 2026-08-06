@@ -372,6 +372,8 @@ footer {
   gap: 2px;
 }
 
+.footer-left { align-items: flex-start; }
+
 .footer-link {
   font-size: var(--size-sm);
   color: var(--red);
