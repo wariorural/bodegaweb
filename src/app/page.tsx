@@ -52,6 +52,26 @@ function monthKey(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
 }
 
+// Google Calendar leverer summary og description HTML-escaped, så «Murt & Marios»
+// kommer som «Murt &amp; Marios». Uten dekoding rendrer React entiteten bokstavelig.
+// Dekodes ETTER at taggene er strippet — dekoder vi først, blir &lt;b&gt; til en ekte
+// tagg som stripperen så spiser opp. Samme funksjon finnes i bodegenerator.
+// Nettleseren kan navnetabellen selv, så vi slipper å vedlikeholde en egen —
+// et håndholdt utvalg ville dekket &amp; men ikke &oslash;. Innhold i en textarea
+// parses som RCDATA: tagger blir tekst, ingen elementer opprettes, ingenting kjører.
+// Kalenderdata hentes klient-side, så DOM-en finnes når dette kalles.
+function decodeEntities(s: string): string {
+  if (typeof document === 'undefined') return s;
+  const el = document.createElement('textarea');
+  el.innerHTML = s;
+  return el.value;
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"]/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+}
+
 function parseFields(raw: string): ParsedFields {
   const cleaned = (raw || '')
     .replace(/<br\s*\/?>/gi, '\n')
@@ -60,6 +80,7 @@ function parseFields(raw: string): ParsedFields {
     .replace(/<[^>]*>/g, '')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+  const decoded = decodeEntities(cleaned);
   const result: ParsedFields = { overtittel: '', undertittel: '', lukket: '', privat: false, info: '', bilde: '' };
 
   let currentKey: string | null = null;
@@ -83,7 +104,7 @@ function parseFields(raw: string): ParsedFields {
     currentLines = [];
   };
 
-  for (const line of cleaned.split('\n')) {
+  for (const line of decoded.split('\n')) {
     const match = line.match(/^\[([^\]]+)\]=(.*)$/);
     if (match) {
       commit();
@@ -99,8 +120,11 @@ function parseFields(raw: string): ParsedFields {
   return result;
 }
 
+// Verdien er dekodet i parseFields, så den inneholder ekte «<» og «&». Den går inn
+// i dangerouslySetInnerHTML, og må escapes før lenke-taggene injiseres — ellers blir
+// «[Info]=<img onerror=…>» i kalenderen til et kjørende element.
 function linkify(text: string) {
-  return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  return escapeHtml(text).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
 }
 
 function eventClass(title: string, parsed: ParsedFields) {
@@ -248,7 +272,7 @@ export default function Home() {
           current.events.length === 0
             ? <div className="empty-month">Ingen arrangementer denne måneden</div>
             : current.events.map(({ ev, d }, i) => {
-                const title = ev.summary || 'Arrangement';
+                const title = decodeEntities(ev.summary || 'Arrangement');
                 const parsed = parseFields(ev.description || '');
                 const cls = eventClass(title, parsed);
                 const isToday = cls === 'has-event' && d.getDate() === todayStart.getDate() && d.getMonth() === todayStart.getMonth() && d.getFullYear() === todayStart.getFullYear();
