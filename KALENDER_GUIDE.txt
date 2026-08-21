@@ -1,0 +1,88 @@
+BODEGA — GUIDE TIL KALENDERBESKRIVELSER
+========================================
+
+Når du legger inn et arrangement i Google Kalender kan du bruke
+disse feltene i beskrivelsesfeltet. Skriv ett felt per linje.
+
+
+TILGJENGELIGE FELT
+------------------
+
+[Overtittel]=Navn på DJ, artist eller arrangør
+  → Vises som liten tekst over tittelen på nettsiden.
+  → Eksempel: [Overtittel]=DJ Kleppe
+  → (Gamle [Host]= og [Arrangør]= virker fortsatt, men bruk
+     [Overtittel] i nye arrangementer.)
+
+[Undertittel]=En kort beskrivelse
+  → Vises som liten tekst under tittelen.
+  → Eksempel: [Undertittel]=Gratis filmvisning og felles samtale
+
+[Lukket]=Tekst på badge
+  → Viser en grå badge og gjør raden litt gjennomsiktig.
+  → Eksempel: [Lukket]=Lukket  eller  [Lukket]=Kun medlemmer
+
+[Privat]=ja
+  → Skjuler arrangementet helt fra nettsiden.
+  → Eksempel: [Privat]=ja
+
+[Internt]=Teknisk info til oss selv
+  → Vises ALDRI på nettsiden, og plukkes ikke opp av eventsøkene
+    som henter arrangementer fra siden vår.
+  → Her legger du utstyr, rigg og huskelapper.
+  → Kan være flere linjer lang.
+  → Eksempel:
+     [Internt]=Prosjektor + lerret
+     CDJ-3000 ×2, egen mikser
+     Ekstra bord til merch
+
+[Info]=Mer tekst om arrangementet
+  → Gjør raden klikkbar. Teksten vises i et popup-vindu.
+  → Kan være flere linjer lang.
+  → Eksempel:
+     [Info]=Kom og se film med oss!
+     Dørene åpner kl. 17.30.
+     Gratis inngang.
+
+[bilde]=https://…
+  → Denne skriver du ikke selv. Knappen «Publiser & kopier lenke»
+    i eventplakat-generatoren lager den og legger den på
+    utklippstavla — du limer den bare inn nederst i beskrivelsen.
+
+
+REGLER
+------
+- Felt som er tomme (ingenting etter =) vises ikke på siden.
+- Du kan bruke så mange eller så få felt du vil.
+- Rekkefølgen på feltene spiller ingen rolle.
+- Tittelen på arrangementet styres av selve tittelen i Google Kalender,
+  ikke av noen beskrivelse.
+- Tekst som står FØR det første [Feltet]= blir ignorert.
+
+
+OM [Internt] OG HEMMELIGHETER
+------------------------------
+[Internt] holder teknisk info borte fra nettsiden og fra eventsøkene.
+Det gjør den ikke hemmelig: kalenderen vår er åpen, så den som vet
+hvor man skal lete kan hente ut hele beskrivelsen — også feltene som
+ikke vises.
+
+Utstyrslister og riggnotater er helt greit. Passord, honorarer og
+private telefonnumre hører ikke hjemme i kalenderen i det hele tatt.
+
+
+EKSEMPEL PÅ KOMPLETT BESKRIVELSE
+---------------------------------
+
+[Overtittel]=Rikke Toska
+[Undertittel]=Hiphop og house
+[Info]=Rikke Toska spiller rytmisk hiphop-house fra kl. 19.
+Gratis inngang. Dørene åpner kl. 18.
+
+[Internt]=DJ-rigg: 2 × CDJ + mikser
+Lyd sjekkes 17.00
+
+
+SPØRSMÅL?
+---------
+bodega@part.no

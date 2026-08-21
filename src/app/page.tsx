@@ -68,6 +68,11 @@ function parseFields(raw: string): ParsedFields {
   const commit = () => {
     if (!currentKey) return;
     const value = currentLines.join('\n').trim();
+    // Allowlist med vilje: et felt som ikke treffer en gren under blir kastet og
+    // når aldri DOM-en. [Internt]=... (utstyr, rigg, huskelapper) er tuftet på
+    // dette — det er slik teknisk info holdes ute av siden og av eventsøkene som
+    // crawler oss. Skal beskrivelsen noen gang rendres i sin helhet, må [Internt]
+    // strippes eksplisitt først, ellers lekker den i stillhet.
     if ((currentKey === 'overtittel' || currentKey === 'host' || currentKey === 'arrangør') && value && !result.overtittel) result.overtittel = value;
     else if (currentKey === 'undertittel' && value) result.undertittel = value;
     else if (currentKey === 'lukket' && value) result.lukket = value;
