@@ -12,6 +12,12 @@ const nextConfig: NextConfig = {
         destination: "https://bodega-kompass.netlify.app",
         permanent: false,
       },
+      // Permanent adresse for ruletten (QR-koder peker hit).
+      {
+        source: "/rulett",
+        destination: "https://bodega-rulett.netlify.app",
+        permanent: false,
+      },
     ];
   },
 };
