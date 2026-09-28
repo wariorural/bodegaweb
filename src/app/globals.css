@@ -10,13 +10,25 @@
   --black: #F7F5F0;
   --bg: #E8391D;
   --line: rgba(247, 245, 240, 0.3);
-  --footer-h: 76px;
   --nav-h: 56px;
   --pad-x: 24px;
-  --size-lg: 5vw;
-  --size-md: 4vw;
-  --size-xs: 1.8vw;
-  --size-sm: 1.2vw;
+  /* Skalaen er clamp(gulv, vw + rem, tak), ikke ren vw. rem-leddet er det som
+     gjør at nettleserzoom virker: ved zoom krymper viewport målt i CSS-piksler
+     proporsjonalt, så et rent vw-tall beholder nøyaktig samme fysiske størrelse
+     uansett zoomnivå — teksten lot seg ikke forstørre i det hele tatt.
+     px-gulvet fjerner kollapsen mellom 600 og 1100px (--size-sm var 7,2px ved
+     601px), og taket stopper 128px-titler på brede skjermer. Fordi skalaen nå
+     er sammenhengende, trenger media-queryen ingen font-overstyringer.
+     Gulv og tak er i rem, ikke px: et px-tak kapper forstørrelsen igjen, så
+     --size-sm stoppet på 20px uansett hvor stor brukeren satte teksten. */
+  --size-lg: clamp(1.625rem, 4.4vw + 0.5rem, 5.75rem);
+  --size-md: clamp(1.875rem, 3.1vw + 0.8rem, 4.25rem);
+  --size-xs: clamp(1rem, 1.1vw + 0.6rem, 1.75rem);
+  --size-sm: clamp(0.8125rem, 0.55vw + 0.6rem, 1.25rem);
+  /* Fast px her møtte vw-innhold og ble for lav: footeren dekket 7px av siste
+     arrangement på 1440px og 21px på 1920px. Følger nå samme kurve som teksten,
+     og vokser med tekststørrelsen så innholdet ikke sprenger den. */
+  --footer-h: clamp(5rem, 4.5rem + 1.2vw, 6.25rem);
   --stroke: 1.5px;
 }
 
@@ -30,6 +42,8 @@ body {
   min-height: 100vh;
   padding-bottom: var(--footer-h);
 }
+
+:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
 
 /* ─── NAV ─── */
 nav {
@@ -47,9 +61,9 @@ nav {
 
 .nav-logo {
   font-size: var(--size-sm);
+  font-weight: normal;
   color: var(--red);
   letter-spacing: 0.02em;
-  text-decoration: none;
 }
 
 .nav-address {
@@ -79,6 +93,7 @@ nav {
 
 .month-name {
   font-size: var(--size-md);
+  font-weight: normal;
   letter-spacing: 0.04em;
   color: var(--red);
   line-height: 1;
@@ -112,7 +127,11 @@ nav {
 /* ─── EVENT LIST ─── */
 .event-row {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  /* minmax(0, …) på alle tre sporene: et rent `auto`-spor vokser til tittelens
+     maksbredde og skyver sidekolonnene ut, så en lang tittel la seg oppå dato og
+     klokkeslett i stedet for å brytes. Klaringen var 4px på live — den forsvant
+     med ett hakk større typografi. */
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, auto) minmax(max-content, 1fr);
   align-items: first baseline;
   column-gap: 16px;
   padding: 12px var(--pad-x);
@@ -120,7 +139,25 @@ nav {
   transition: background 0.15s;
   color: inherit;
   cursor: default;
+  /* Sticky nav + månedsheader dekker ellers raden som nettopp fikk fokus når
+     man tabber nedover lista. */
+  scroll-margin-top: calc(var(--nav-h) + 80px);
 }
+
+/* Rader med popup rendres som <button>, som er det som gjør dem nåbare med
+   tastatur. Knappens egen kontroll-styling må bort, radens beholdes. */
+button.event-row {
+  appearance: none;
+  background: none;
+  border: none;
+  border-bottom: var(--stroke) solid var(--line);
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  width: 100%;
+}
+
+.event-row:focus-visible { outline-offset: -4px; }
 
 .event-row .event-date,
 .event-row .event-content,
@@ -136,7 +173,9 @@ nav {
 .event-row.today .event-overtitle,
 .event-row.today .event-subtitle { color: var(--bg); }
 .event-row.has-popup { cursor: pointer; }
-.event-row.has-popup:hover { background: rgba(232, 57, 29, 0.04); }
+/* Var rgba(232,57,29,0.04) — altså 4 % av bakgrunnsfargen lagt oppå seg selv,
+   som er pikselidentisk med ingenting. Krem er det som faktisk vises. */
+.event-row.has-popup:hover { background: rgba(247, 245, 240, 0.08); }
 .event-row.today.has-popup:hover { background: var(--red); }
 .event-row.closed { opacity: 0.45; }
 .event-row.closed:hover { background: none; }
@@ -163,6 +202,9 @@ nav {
   flex-direction: column;
   align-items: center;
   gap: 2px;
+  /* .event-row > * gir min-width: 0 til .event-content, men ikke videre ned hit.
+     Uten dette bidrar gruppen fortsatt med full min-content til grid-sporet. */
+  min-width: 0;
 }
 
 .event-title {
@@ -170,6 +212,9 @@ nav {
   line-height: 1;
   color: var(--black);
   text-align: center;
+  /* .event-overtitle har hatt denne hele tiden; tittelen fikk den aldri, så et
+     langt sammensatt bandnavn kunne bryte ut av grid-sporet. */
+  overflow-wrap: anywhere;
 }
 
 .event-overtitle {
@@ -194,7 +239,7 @@ nav {
 }
 
 .event-badge {
-  font-size: 0.85vw;
+  font-size: var(--size-sm);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   border: 1px solid #ccc;
@@ -244,26 +289,16 @@ nav {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ─── MODAL ─── */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(232, 57, 29, 0.55);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  z-index: 200;
-  align-items: center;
-  justify-content: center;
-  padding: var(--pad-x);
-}
-
-.modal-overlay.open { display: flex; }
-
+/* <dialog> + showModal() gir fokusfelle, Escape, inert bakgrunn og fokus tilbake
+   til raden som åpnet den — alt gratis fra nettleseren. */
 .modal-frame {
-  background: var(--red);
+  border: none;
   padding: 3px;
+  background: var(--red);
   max-width: 640px;
-  width: 100%;
+  width: calc(100% - var(--pad-x) * 2);
+  max-height: 85dvh;
+  overflow: visible;
   clip-path: polygon(
     20px 0%, calc(100% - 20px) 0%,
     100% 20px, 100% calc(100% - 20px),
@@ -272,10 +307,18 @@ nav {
   );
 }
 
+.modal-frame::backdrop {
+  background: rgba(232, 57, 29, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
 .modal {
   background: var(--bg);
-  max-height: 80vh;
+  max-height: calc(85dvh - 6px);
   overflow-y: auto;
+  /* Uten denne tar siden bak over når man scroller forbi enden av modalen. */
+  overscroll-behavior: contain;
   position: relative;
   clip-path: polygon(
     17px 0%, calc(100% - 17px) 0%,
@@ -285,7 +328,13 @@ nav {
   );
 }
 
+/* Sticky fordi .modal er scroll-containeren: i en lang popup scrollet både
+   lukkeknappen og tittelen ut av syne, og på telefon finnes ingen Escape. */
 .modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg);
   padding: 28px var(--pad-x) 20px;
   border-bottom: var(--stroke) solid var(--red);
 }
@@ -315,6 +364,7 @@ nav {
 
 .modal-title {
   font-size: var(--size-lg);
+  font-weight: normal;
   line-height: 1.05;
   color: var(--black);
 }
@@ -355,7 +405,7 @@ footer {
   bottom: 0;
   left: 0;
   right: 0;
-  height: var(--footer-h);
+  min-height: var(--footer-h);
   background: var(--bg);
   border-top: var(--stroke) solid var(--red);
   padding: 20px var(--pad-x);
@@ -384,22 +434,14 @@ footer {
 .footer-link:hover { opacity: 0.6; }
 
 /* ─── RESPONSIVE ─── */
+/* Kun layout. Skalaen over er sammenhengende fra 360px og opp, så
+   font-overstyringene som sto her (7vw, 2.5vw, egne --size-*) er borte. */
 @media (max-width: 600px) {
-  :root {
-    --size-lg: 9.5vw;
-    --size-md: 8.5vw;
-    --size-xs: 4.5vw;
-    --size-sm: 3.5vw;
-    --pad-x: 16px;
-  }
+  :root { --pad-x: 16px; }
   .month-header { padding: 12px var(--pad-x); }
   .event-row { grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 10px; padding: 12px var(--pad-x); }
   .event-content { align-items: stretch; }
-  .event-date-num { font-size: 7vw; }
-  .event-title { font-size: 7vw; }
   .event-title-group { align-items: center; }
   .event-subtitle { max-width: 100%; text-align: center; }
-  .event-time { font-size: 7vw; }
-  .event-badge { font-size: 2.5vw; }
   .modal-daytime { font-size: var(--size-sm); }
 }

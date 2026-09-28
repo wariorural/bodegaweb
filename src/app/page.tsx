@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY!;
 const CALENDAR_ID = process.env.NEXT_PUBLIC_CALENDAR_ID!;
@@ -13,6 +13,7 @@ const NO_DAYS = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 
 const NO_MONTHS = ['januar', 'februar', 'mars', 'april', 'mai', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'desember'];
 
 interface CalEvent {
+  id?: string;
   summary: string;
   description?: string;
   start: { dateTime?: string; date?: string };
@@ -33,7 +34,16 @@ interface ParsedFields {
   bilde: string;
 }
 
+interface Row {
+  ev: CalEvent;
+  d: Date;
+  title: string;
+  parsed: ParsedFields;
+  cls: string;
+}
+
 interface PopupData {
+  id: string;
   title: string;
   daytime: string;
   info: string;
@@ -50,6 +60,12 @@ function formatTime(iso: string) {
 
 function monthKey(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
+}
+
+// Nøkkelen som havner i URL-en er 1-basert, i motsetning til monthKey — «2026-09»
+// skal bety september for den som leser adressefeltet.
+function monthParam(d: Date) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 }
 
 // Google Calendar leverer summary og description HTML-escaped, så «Murt & Marios»
@@ -127,10 +143,16 @@ function linkify(text: string) {
   return escapeHtml(text).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
 }
 
+// «jul» skal treffe juleaften og julebord, men ikke «juli» — derfor negativt
+// lookahead i stedet for includes, som gjorde «Sommerfest 5. juli» til helligdag.
+const HOLIDAY_RE = /\b(?:stengt|ferie|påske|jul(?!i\b))/i;
+
 function eventClass(title: string, parsed: ParsedFields) {
-  const t = title.toLowerCase();
-  if (t.includes('stengt') || t.includes('ferie') || t.includes('påske') || t.includes('jul')) return 'holiday';
+  // [Privat] avgjøres FØR helligdagsordene. Motsatt rekkefølge gjorde at et
+  // lukket selskap som het «Julebord Firma AS» ble klassifisert som holiday og
+  // rendret offentlig med full tittel, i stedet for å bli skjult.
   if (parsed.privat) return 'private';
+  if (HOLIDAY_RE.test(title)) return 'holiday';
   if (parsed.lukket !== '') return 'closed';
   return 'has-event';
 }
@@ -141,21 +163,35 @@ function groupByMonth(events: CalEvent[]): MonthGroup[] {
     const startRaw = ev.start.dateTime || ev.start.date!;
     const d = new Date(startRaw);
     const key = monthKey(d);
-    if (!map.has(key)) map.set(key, { key, date: d, events: [] });
+    if (!map.has(key)) map.set(key, { key, date: new Date(d.getFullYear(), d.getMonth(), 1), events: [] });
     map.get(key)!.events.push({ ev, d });
   }
-  return [...map.values()];
+  const sorted = [...map.values()].sort((a, b) => a.date.getTime() - b.date.getTime());
+  if (sorted.length < 2) return sorted;
+  // Måneder uten arrangementer får en tom gruppe. Uten dem hopper pilen rett fra
+  // august til oktober, og det leses som at knappen bomma — ikke som at oktober
+  // er tom. Det er også dette som gjør .empty-month nåbar.
+  const out: MonthGroup[] = [];
+  const cursor = new Date(sorted[0].date);
+  const last = sorted[sorted.length - 1].date;
+  while (cursor <= last) {
+    const key = monthKey(cursor);
+    out.push(map.get(key) ?? { key, date: new Date(cursor), events: [] });
+    cursor.setMonth(cursor.getMonth() + 1);
+  }
+  return out;
 }
 
-async function fetchWithFallback(url: string) {
-  try {
-    const res = await fetch(url);
-    if (res.ok) return res.json();
-  } catch (_) {}
-  const proxy = 'https://corsproxy.io/?' + encodeURIComponent(url);
-  const res = await fetch(proxy);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
+function popupFrom(r: Row): PopupData {
+  const timeStr = r.ev.start.dateTime ? formatTime(r.ev.start.dateTime) : null;
+  return {
+    id: r.ev.id ?? '',
+    title: r.title,
+    daytime: `${NO_DAYS[r.d.getDay()]} ${formatDate(r.d)}${timeStr ? ' · ' + timeStr : ''}`,
+    info: r.parsed.info,
+    overtittel: r.parsed.overtittel,
+    bilde: r.parsed.bilde,
+  };
 }
 
 export default function Home() {
@@ -165,7 +201,9 @@ export default function Home() {
   const [modal, setModal] = useState<PopupData | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const monthHeaderRef = useRef<HTMLDivElement>(null);
-  const todayRowRef = useRef<HTMLDivElement>(null);
+  const todayRowRef = useRef<HTMLElement | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const pendingEventId = useRef<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -182,14 +220,19 @@ export default function Home() {
         + `&singleEvents=true`
         + `&maxResults=500`;
       try {
-        const data = await fetchWithFallback(url);
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
         const items = (data.items || []).filter((ev: CalEvent) => ev.start.dateTime);
         if (!items.length) { setStatus('empty'); return; }
         const grouped = groupByMonth(items);
-        const todayKey = monthKey(new Date());
-        const idx = grouped.findIndex(m => m.key === todayKey);
+        const params = new URLSearchParams(window.location.search);
+        const wanted = params.get('maned');
+        pendingEventId.current = params.get('e');
+        const fromUrl = wanted ? grouped.findIndex(m => monthParam(m.date) === wanted) : -1;
+        const todayIdx = grouped.findIndex(m => m.key === monthKey(new Date()));
         setMonths(grouped);
-        setCurrentIdx(idx >= 0 ? idx : 0);
+        setCurrentIdx(fromUrl >= 0 ? fromUrl : Math.max(0, todayIdx));
         setStatus('ok');
       } catch {
         setStatus('error');
@@ -198,64 +241,143 @@ export default function Home() {
     load();
   }, []);
 
-  useEffect(() => {
-    if (status !== 'ok') return;
-    const frame = requestAnimationFrame(() => {
-      if (!todayRowRef.current) return;
-      const stickyH = (navRef.current?.offsetHeight ?? 0) + (monthHeaderRef.current?.offsetHeight ?? 0);
-      const top = todayRowRef.current.getBoundingClientRect().top + window.scrollY - stickyH;
-      window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [status]);
+  const current = months[currentIdx];
+
+  const rows = useMemo<Row[]>(() => {
+    if (!current) return [];
+    return current.events
+      .map(({ ev, d }) => {
+        const title = decodeEntities(ev.summary || 'Arrangement');
+        const parsed = parseFields(ev.description || '');
+        return { ev, d, title, parsed, cls: eventClass(title, parsed) };
+      })
+      // Filtreres FØR scrollTargetIdx regnes under. Regnet vi på den ufiltrerte
+      // lista, ville ref-en aldri bli festet når første kommende rad er [Privat],
+      // og auto-scrollen døde stille.
+      .filter(r => r.cls !== 'private');
+  }, [current]);
+
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+  const scrollTargetIdx = rows.findIndex(({ d }) => d >= todayStart);
+
+  const setRowRef = useCallback((el: HTMLElement | null) => { todayRowRef.current = el; }, []);
 
   const closeModal = useCallback(() => {
     setModal(null);
     document.body.style.overflow = '';
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('e')) {
+      url.searchParams.delete('e');
+      window.history.replaceState({}, '', url);
+    }
   }, []);
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') closeModal(); };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  }, [closeModal]);
+  const openModal = useCallback((r: Row) => {
+    const data = popupFrom(r);
+    setModal(data);
+    document.body.style.overflow = 'hidden';
+    if (!data.id) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set('e', data.id);
+    window.history.pushState({}, '', url);
+  }, []);
 
-  const current = months[currentIdx];
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
-  const scrollTargetIdx = current
-    ? current.events.findIndex(({ d }) => d >= todayStart)
-    : -1;
+  const goMonth = useCallback((next: number) => {
+    setCurrentIdx(next);
+    const m = months[next];
+    if (!m) return;
+    const url = new URL(window.location.href);
+    url.searchParams.set('maned', monthParam(m.date));
+    url.searchParams.delete('e');
+    window.history.pushState({}, '', url);
+  }, [months]);
+
+  // Åpner popupen for ?e=… når lenken er delt direkte. Kjøres når radene finnes,
+  // og bare én gang — derfor nulles ref-en.
+  useEffect(() => {
+    const id = pendingEventId.current;
+    if (!id || !rows.length) return;
+    pendingEventId.current = null;
+    const hit = rows.find(r => r.ev.id === id);
+    if (!hit) return;
+    setModal(popupFrom(hit));
+    document.body.style.overflow = 'hidden';
+  }, [rows]);
+
+  useEffect(() => {
+    const onPop = () => {
+      const params = new URLSearchParams(window.location.search);
+      const wanted = params.get('maned');
+      if (wanted) {
+        const i = months.findIndex(m => monthParam(m.date) === wanted);
+        if (i >= 0) setCurrentIdx(i);
+      }
+      if (!params.get('e')) {
+        setModal(null);
+        document.body.style.overflow = '';
+      }
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, [months]);
+
+  // <dialog> eier åpen/lukket-tilstanden sin selv, så den synkes mot React-state
+  // her. showModal() gir fokusfelle, Escape, inert bakgrunn og fokus tilbake til
+  // raden som åpnet den — alt det vi ellers måtte skrevet for hånd.
+  useEffect(() => {
+    const dlg = dialogRef.current;
+    if (!dlg) return;
+    if (modal && !dlg.open) dlg.showModal();
+    else if (!modal && dlg.open) dlg.close();
+  }, [modal]);
+
+  useEffect(() => {
+    if (status !== 'ok') return;
+    const frame = requestAnimationFrame(() => {
+      const stickyH = (navRef.current?.offsetHeight ?? 0) + (monthHeaderRef.current?.offsetHeight ?? 0);
+      if (todayRowRef.current) {
+        const top = todayRowRef.current.getBoundingClientRect().top + window.scrollY - stickyH;
+        window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+      } else {
+        // Andre måneder enn inneværende har ingen «i dag»-rad å sikte mot. Uten
+        // dette ble scrollposisjonen stående, så et bytte til en kortere måned
+        // landet deg i bunnen av den.
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [status, currentIdx]);
 
   return (
     <>
       <nav ref={navRef}>
-        <a className="nav-logo" href="#">Bodega</a>
-        <span className="nav-address">Kong Oscars gate 23</span>
+        <h1 className="nav-logo">Bodega</h1>
+        <span className="nav-address">Bar i Kong Oscars gate 23, Bergen</span>
       </nav>
 
       {status === 'ok' && current && (
         <div className="month-header" ref={monthHeaderRef}>
           <button
             className="month-btn"
-            onClick={() => setCurrentIdx(i => i - 1)}
+            onClick={() => goMonth(currentIdx - 1)}
             disabled={currentIdx === 0}
             aria-label="Forrige måned"
           >←</button>
           <div className="month-label">
-            <span className="month-name">{NO_MONTHS[current.date.getMonth()]}</span>
+            <h2 className="month-name">{NO_MONTHS[current.date.getMonth()]}</h2>
             <span className="month-year">{current.date.getFullYear()}</span>
           </div>
           <button
             className="month-btn"
-            onClick={() => setCurrentIdx(i => i + 1)}
+            onClick={() => goMonth(currentIdx + 1)}
             disabled={currentIdx === months.length - 1}
             aria-label="Neste måned"
           >→</button>
         </div>
       )}
 
-      <div id="calendar-root">
+      <main id="calendar-root">
         {status === 'loading' && (
           <div className="state-msg">
             <div className="spinner" />
@@ -269,39 +391,20 @@ export default function Home() {
           <div className="state-msg">Ingen kommende arrangementer.</div>
         )}
         {status === 'ok' && current && (
-          current.events.length === 0
+          rows.length === 0
             ? <div className="empty-month">Ingen arrangementer denne måneden</div>
-            : current.events.map(({ ev, d }, i) => {
-                const title = decodeEntities(ev.summary || 'Arrangement');
-                const parsed = parseFields(ev.description || '');
-                const cls = eventClass(title, parsed);
+            : rows.map((r, i) => {
+                const { ev, d, title, parsed, cls } = r;
                 const isToday = cls === 'has-event' && d.getDate() === todayStart.getDate() && d.getMonth() === todayStart.getMonth() && d.getFullYear() === todayStart.getFullYear();
                 const dayName = NO_DAYS[d.getDay()];
                 const dateStr = formatDate(d);
                 const timeStr = ev.start.dateTime ? formatTime(ev.start.dateTime) : null;
-
-                if (cls === 'private') return null;
-
                 const hasPopup = cls === 'has-event' && (!!parsed.info || !!parsed.bilde);
+                const rowClass = `event-row ${cls} ${hasPopup ? 'has-popup' : ''} ${isToday ? 'today' : ''}`;
+                const ref = i === scrollTargetIdx ? setRowRef : undefined;
 
-                const handleClick = hasPopup ? () => {
-                  setModal({
-                    title,
-                    daytime: `${dayName} ${dateStr}${timeStr ? ' · ' + timeStr : ''}`,
-                    info: parsed.info,
-                    overtittel: parsed.overtittel,
-                    bilde: parsed.bilde,
-                  });
-                  document.body.style.overflow = 'hidden';
-                } : undefined;
-
-                return (
-                  <div
-                    key={i}
-                    ref={i === scrollTargetIdx ? todayRowRef : undefined}
-                    className={`event-row ${cls} ${hasPopup ? 'has-popup' : ''} ${isToday ? 'today' : ''}`}
-                    onClick={handleClick}
-                  >
+                const inner = (
+                  <>
                     {parsed.overtittel && <div className="event-overtitle">{parsed.overtittel}</div>}
                     <div className="event-date">
                       <span className="event-date-num">{dateStr}</span>
@@ -315,24 +418,41 @@ export default function Home() {
                       {parsed.undertittel && <div className="event-subtitle">{parsed.undertittel}</div>}
                     </div>
                     <div className="event-time">{timeStr || '—'}</div>
+                  </>
+                );
+
+                // En rad som åpner popup er en knapp, ikke en div med onClick.
+                // Det er det som gjør arrangementene nåbare med tastatur.
+                return hasPopup ? (
+                  <button key={i} type="button" ref={ref} className={rowClass} onClick={() => openModal(r)}>
+                    {inner}
+                  </button>
+                ) : (
+                  <div key={i} ref={ref} className={rowClass}>
+                    {inner}
                   </div>
                 );
               })
         )}
-      </div>
+      </main>
 
-      {modal && (
-        <div
-          className="modal-overlay open"
-          onClick={(e) => { if (e.target === e.currentTarget) closeModal(); }}
-        >
-          <div className="modal-frame">
+      <dialog
+        className="modal-frame"
+        ref={dialogRef}
+        onClose={closeModal}
+        onClick={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeModal();
+        }}
+        aria-labelledby="modal-title"
+      >
+        {modal && (
           <div className="modal">
-            <button className="modal-close" onClick={closeModal}>×</button>
             <div className="modal-header">
+              <button className="modal-close" onClick={closeModal} aria-label="Lukk">×</button>
               <div className="modal-daytime">{modal.daytime}</div>
               {modal.overtittel && <div className="event-overtitle modal-overtitle">{modal.overtittel}</div>}
-              <div className="modal-title">{modal.title}</div>
+              <h2 className="modal-title" id="modal-title">{modal.title}</h2>
             </div>
             {(modal.bilde || DEFAULT_BILDE) && (
               <img className="modal-image" src={modal.bilde || DEFAULT_BILDE} alt="" />
@@ -341,9 +461,8 @@ export default function Home() {
               <div className="modal-body" dangerouslySetInnerHTML={{ __html: linkify(modal.info) }} />
             )}
           </div>
-          </div>
-        </div>
-      )}
+        )}
+      </dialog>
 
       <footer>
         <div className="footer-lease footer-left">
