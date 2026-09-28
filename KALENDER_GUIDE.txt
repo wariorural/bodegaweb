@@ -23,12 +23,16 @@ TILGJENGELIGE FELT
   → Eksempel: [Lukket]=Lukket  eller  [Lukket]=Kun medlemmer
 
 [Privat]=ja
-  → Skjuler arrangementet helt fra nettsiden.
+  → Skjuler arrangementet fra nettsiden.
+  → NB: det skjuler det fra SIDEN, ikke fra kalenderen. Selve
+    arrangementet ligger fortsatt åpent for den som henter
+    kalenderen direkte. Se avsnittet om hemmeligheter nederst.
   → Eksempel: [Privat]=ja
 
 [Internt]=Teknisk info til oss selv
   → Vises ALDRI på nettsiden, og plukkes ikke opp av eventsøkene
-    som henter arrangementer fra siden vår.
+    som henter arrangementer fra siden vår. Men det er ikke det
+    samme som hemmelig — se avsnittet nederst.
   → Her legger du utstyr, rigg og huskelapper.
   → Kan være flere linjer lang.
   → Eksempel:
@@ -60,15 +64,29 @@ REGLER
 - Tekst som står FØR det første [Feltet]= blir ignorert.
 
 
-OM [Internt] OG HEMMELIGHETER
-------------------------------
-[Internt] holder teknisk info borte fra nettsiden og fra eventsøkene.
-Det gjør den ikke hemmelig: kalenderen vår er åpen, så den som vet
-hvor man skal lete kan hente ut hele beskrivelsen — også feltene som
-ikke vises.
+OM [Privat], [Internt] OG HEMMELIGHETER
+----------------------------------------
+Begge feltene styrer hva NETTSIDEN viser. Ingen av dem gjør noe
+hemmelig.
 
-Utstyrslister og riggnotater er helt greit. Passord, honorarer og
-private telefonnumre hører ikke hjemme i kalenderen i det hele tatt.
+Kalenderen vår er åpen. Hvem som helst kan hente hele kalenderen
+direkte — med tittel, dato og full beskrivelse — uten passord og
+uten å gå via nettsiden. Det gjelder også arrangementer merket
+[Privat], og alt som står i [Internt].
+
+Tenk på det slik: feltene bestemmer hva som er SYNLIG for en vanlig
+besøkende, ikke hva som er LUKKET.
+
+Utstyrslister og riggnotater er helt greit — ingen bryr seg om at vi
+trenger to CDJ-er. Dette hører derimot ikke hjemme i kalenderen i det
+hele tatt, uansett felt:
+  - passord og koder
+  - honorarer og avtalte priser
+  - private telefonnumre og adresser
+  - navn på gjester som ikke vil ha det offentlig
+
+Skal et arrangement være genuint skjult, sett det opp i en egen,
+lukket kalender — ikke bare med [Privat] i denne.
 
 
 EKSEMPEL PÅ KOMPLETT BESKRIVELSE

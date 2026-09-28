@@ -167,3 +167,60 @@ Verifisert etterpå, alle ni måneder per bredde:
 viewport-kanten. Det fanget ikke denne, fordi kolonnene kolliderte INNE i raden
 uten at noe gikk utenfor skjermen. En kollisjonstest mellom søsken-kolonner bør
 inn i skillen ved siden av overflyt-testen.
+
+---
+
+## Runde 2 (2026-09-28, samme dag) — punkt 20, 21 + undertittel-bug
+
+### Undertittelen brøt seg selv
+Mario så «Platemesse i samarbeid / med EKKO» delt over to linjer under en kort
+tittel. `.event-subtitle` hadde `max-width: 75%`, og prosenten måles mot
+midtkolonnen — som er dimensjonert etter det bredeste elementet i seg selv.
+Under «Disk Mart» ble kolonnen 378px, undertittelen fikk 284px, og den trengte
+378px. Kolonnen var altså bred nok; regelen strammet den inn på egen hånd.
+
+Fiks: `max-width: min(100%, 40ch)`. Lesbar linjelengde er uavhengig av hvor
+bred tittelen tilfeldigvis er. Desktop: én linje. Mobil 375px: to linjer, men
+nå fordi teksten faktisk ikke får plass, ikke fordi regelen kapper den.
+
+Dette var UX-agentens K2-korrigering, som jeg ikke hadde fulgt opp.
+`DESIGN_REVIEW.md:63-64` beskriver mekanismen motsatt vei og er feil.
+
+### Punkt 20 — farge
+`--bg` fra `#E8391D` (3,83:1) til `#D43218` (4,52:1). Regnet, ikke gjettet:
+
+| bakgrunn | kontrast mot krem | AA normal |
+|---|---|---|
+| #E8391D (gammel) | 3,83:1 | nei |
+| #D83217 | 4,39:1 | nei |
+| **#D43218 (valgt)** | **4,52:1** | **ja** |
+| #C42A12 (agentenes) | 5,23:1 | ja |
+
+Valgte minste endring som passerer: 4,6 L*-enheter mørkere mot agentenes 8,6.
+`#C42A12` leser som murstein, `#D43218` beholder signalrødheten. Tre
+skjermbilder vist til Mario før valget.
+
+Byttet tre steder: `--bg`, `.modal-frame::backdrop` (rgba 232,57,29 → 212,50,24)
+og `opengraph-image.tsx`.
+
+**Badge-fargene er fortsatt ikke rørt** (grå #aaa på #f0f0ee, 2,04:1). Den er et
+eget designvalg — en lys grå pille på rød flate ser uansett ut som en feil.
+
+### Punkt 21 — KALENDER_GUIDE.txt
+KORRIGERING: jeg meldte at guiden «lover mer enn koden holder». Den hadde
+allerede et presist avsnitt om at kalenderen er åpen (linje 63-71). Jeg
+videreformidlet sikkerhetsagentens påstand uten å lese fila.
+
+Det som faktisk manglet: `[Privat]` sto uten forbehold i det hele tatt. Nå har
+feltet en NB-linje, `[Internt]` kryssreferer, og avsnittet nederst dekker begge
+felt, lister hva som aldri hører hjemme i kalenderen, og sier at genuint skjulte
+arrangementer må i en egen lukket kalender.
+
+### Vercel
+`NEXT_PUBLIC_SANITY_DATASET` og `NEXT_PUBLIC_SANITY_PROJECT_ID` fjernet fra alle
+tre miljøer. Bare de to Google Calendar-variablene står igjen. (Gjenopprettes om
+nødvendig: projectId `1etgf2m5`, dataset `production`.)
+
+### Utilsiktet
+`pkill -f "next-server"` tok ned bodegenerator-serveren til Mario. Den var ikke
+min. For bred match — bruk full sti neste gang.

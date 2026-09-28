@@ -8,7 +8,7 @@
 :root {
   --red: #F7F5F0;
   --black: #F7F5F0;
-  --bg: #E8391D;
+  --bg: #D43218;
   --line: rgba(247, 245, 240, 0.3);
   --nav-h: 56px;
   --pad-x: 24px;
@@ -234,7 +234,12 @@ button.event-row {
   margin-top: 4px;
   line-height: 1.3;
   font-size: var(--size-xs);
-  max-width: 75%;
+  /* Var 75%, men prosenten måles mot midtkolonnen — og den er dimensjonert etter
+     det bredeste elementet i seg selv. Under en kort tittel ble kolonnen smal, og
+     75% av den smalere igjen, så undertittelen brøt seg selv om det var plass
+     («Platemesse i samarbeid med EKKO» fikk 284 av de 378px den trengte).
+     Begrens på lesbar linjelengde i stedet — den er uavhengig av tittelen. */
+  max-width: min(100%, 40ch);
   text-align: center;
 }
 
@@ -308,7 +313,7 @@ button.event-row {
 }
 
 .modal-frame::backdrop {
-  background: rgba(232, 57, 29, 0.55);
+  background: rgba(212, 50, 24, 0.55);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
