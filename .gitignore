@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Originalbilder til /utleie — beskjæres til public/lokalet-*.jpg
+/bilder-inn/
