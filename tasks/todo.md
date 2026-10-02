@@ -3,13 +3,24 @@
 Låst med Mario 02.10.26: ekte endepunkt via Resend, to designretninger til
 gjennomsyn, utstyrsliste og bilder kommer fra Mario.
 
+## Status 02.10 — LIVE på bodega.part.no/utleie
+
+Retning B «Lokalet» valgt. `noindex, nofollow`, ikke lenket fra forsiden.
+Commit `bd6de40`. Verifisert mot live: 200, noindex i head, forsidens footer
+uendret.
+
 ## Avhengig av Mario
 
 - [ ] **3–4 vibbebilder** av lokalet. Legges i `public/lokalet-1..4.jpg`.
       Skissene kjører med plassholdere til de kommer.
 - [ ] **Utstyrsliste** — `fakta.md` har bare «projektor, lerret og mic».
       Står det en PA, en mikser, DJ-rigg? Fyll `TEKNISK` i `utleie/innhold.ts`.
-- [ ] **Velg retning** A «Oppslaget» eller B «Lokalet».
+- [x] ~~Velg retning~~ → B «Lokalet»
+- [ ] **`RESEND_API_KEY`** — til den er satt svarer skjemaet «Klarte ikke
+      sende. Send gjerne en mail til bodega@part.no i stedet.»
+      `npx vercel env add RESEND_API_KEY production` (og `preview`), så redeploy.
+- [ ] **Godkjenning fra styret** på tekst og priser → så fjernes `robots` fra
+      `utleie/page.tsx` og footerens «Leie Bodega?» blir lenke til `/utleie`.
 
 ## Bygget 02.10 — venter på valg
 
@@ -41,7 +52,6 @@ input-regelen og ble 20×44-ovaler. `:not([type='radio'])` på den regelen.
 
 - [ ] `RESEND_API_KEY` i Vercel (Production + Preview) — **env krever redeploy**
 - [ ] Bekreft at `utleie@send.part.no` er verifisert avsender i Resend-kontoen
-- [ ] Slett taperen av `/utleie` og `/utleie/bilder` når retning er valgt
 - [ ] Bytt ut `public/lokalet-1..4.jpg` (nå fire utsnitt av samme skiltbilde)
 
 ## Opprinnelig verifikasjonsplan
