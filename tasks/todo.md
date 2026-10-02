@@ -9,6 +9,13 @@ Retning B «Lokalet» valgt. `noindex, nofollow`, ikke lenket fra forsiden.
 Commit `bd6de40`. Verifisert mot live: 200, noindex i head, forsidens footer
 uendret.
 
+## Dagslogg 02.10
+
+LIVE på bodega.part.no/utleie, noindex, ikke lenket fra forsiden. Fire commits.
+Retning B «Lokalet» valgt. Skjemaet verifisert mot prod (200). Fire ekte bilder
+inne. 2 500-alternativet fjernet fra både siden og fakta.md. Bodega/ ligger nå på
+det private repoet wariorural/bodega-kunnskap.
+
 ## Avhengig av Mario
 
 - [x] ~~Vibbebilder~~ → fire inne, beskåret 4:5
@@ -16,13 +23,14 @@ uendret.
       settes i `innhold.ts`. PDF eller bilde.
 - [ ] **Utstyrsliste** — `fakta.md` har bare «projektor, lerret og mic».
       Står det en PA, en mikser, DJ-rigg? Fyll `TEKNISK` i `utleie/innhold.ts`.
-- [ ] **`Bodega/fakta.md`** oppgir fortsatt 2 500 kr som generelt alternativ.
-      Siden gjør det ikke lenger. Mail-utkastene leser fakta.md.
+- [x] ~~fakta.md oppgir 2 500 som generelt alternativ~~ → fjernet fire steder,
+      og lagt inn igjen som «Ikke offentlig — kun fagforeninger»
 - [x] ~~Velg retning~~ → B «Lokalet»
 - [x] ~~`RESEND_API_KEY`~~ satt i Production. Testforespørsel mot prod ga 200.
       Leveringen i innboksen er ikke verifisert herfra — Gmail-koblingen er ikke
       autentisert i denne sesjonen.
-- [ ] `RESEND_API_KEY` mangler fortsatt i **Preview**.
+- [x] ~~RESEND_API_KEY i Preview~~ — den var der hele tiden; jeg leste
+      `vercel env ls production` og tolket filteret som fravær.
 - [ ] **Godkjenning fra styret** på tekst og priser → så fjernes `robots` fra
       `utleie/page.tsx` og footerens «Leie Bodega?» blir lenke til `/utleie`.
 
