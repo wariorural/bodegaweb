@@ -1,3 +1,25 @@
+/*
+  All tekst på bodega.part.no/utleie står i denne fila.
+
+  Endre fra mobilen: åpne fila på github.com/wariorural/bodegaweb, trykk blyanten,
+  rediger, «Commit changes». Vercel bygger og publiserer av seg selv i løpet av et
+  minutt.
+
+  Trygt å endre:
+    – ord og setninger INNE i anførselstegnene '…'
+    – å legge til eller fjerne en hel linje i en liste, så lenge den ser ut som
+      naboene og slutter med komma
+
+  Ikke rør:
+    – anførselstegn, komma, krøll- og hakeparenteser
+    – ordene til venstre for : (label, verdi, dag, tid, src, alt)
+    – \u00a0 i prisen — det er et mellomrom som ikke kan brytes, så «3 750 kr»
+      aldri deles over to linjer
+
+  Brekker du noe, feiler bygget OG DEN GAMLE SIDEN BLIR STÅENDE. Ingenting går i
+  stykker for besøkende — du ser en rød X på GitHub, og kan rette eller angre.
+*/
+
 export const INTRO =
   'Bodega er et lite lokale med stor stemme — 67 plasser, bar, scene og projektor. ' +
   'Vi leier ut til bursdager, slipp, visninger, firmafester og alt som tåler å bli ' +
