@@ -3,6 +3,7 @@ import {
   APNINGSTIDER,
   APNINGSTIDER_NOTE,
   FAKTA,
+  PLANTEGNING,
   TEKNISK,
   TEKNISK_NOTE,
 } from './innhold';
@@ -33,6 +34,18 @@ export function Fakta() {
           </div>
         ))}
       </dl>
+    </section>
+  );
+}
+
+export function Plantegning() {
+  if (!PLANTEGNING) return null;
+  return (
+    <section className="u-seksjon" aria-labelledby="h-plan">
+      <h2 className="u-h2" id="h-plan">
+        Plantegning
+      </h2>
+      <img className="u-plan" src={PLANTEGNING.src} alt={PLANTEGNING.alt} />
     </section>
   );
 }

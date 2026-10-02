@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react';
 
 const TYPER = ['Lukket arrangement', 'Åpent arrangement', 'Vet ikke ennå'];
-const BAR = ['Med bartender', 'Vi står i baren selv', 'Usikker'];
 
 export default function Skjema() {
   const [status, setStatus] = useState<'klar' | 'sender' | 'sendt'>('klar');
@@ -81,16 +80,6 @@ export default function Skjema() {
           <label key={t}>
             <input type="radio" name="type" value={t} defaultChecked={t === TYPER[2]} />
             <span>{t}</span>
-          </label>
-        ))}
-      </fieldset>
-
-      <fieldset className="u-valg">
-        <legend>Bar</legend>
-        {BAR.map((b) => (
-          <label key={b}>
-            <input type="radio" name="bar" value={b} defaultChecked={b === BAR[2]} />
-            <span>{b}</span>
           </label>
         ))}
       </fieldset>

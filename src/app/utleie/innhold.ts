@@ -3,18 +3,11 @@ export const INTRO =
   'Vi leier ut til bursdager, slipp, visninger, firmafester og alt som tåler å bli ' +
   'litt høyt. Dere får lokalet som det er: rødt, lavt under taket og allerede i stemning.';
 
-export const PRISER = [
-  {
-    pris: '3 750 kr',
-    tittel: 'Med bartender',
-    detalj: 'Vi rigger og står i baren. Prisen er inkludert moms.',
-  },
-  {
-    pris: '2 500 kr',
-    tittel: 'Dere står i baren',
-    detalj: 'Vi holder opplæring på forhånd, så kjører dere baren selv.',
-  },
-];
+export const PRIS = {
+  pris: '3\u00a0750\u00a0kr',
+  tittel: 'Hele lokalet',
+  detalj: 'Inkludert moms. Vi rigger og står i baren, så dere slipper å tenke på det.',
+};
 
 export const FAKTA = [
   { label: 'Kapasitet', verdi: '67 personer' },
@@ -49,8 +42,11 @@ export const TEKNISK_NOTE =
   'skjemaet — det er oftest løsbart.';
 
 export const BILDER = [
-  { src: '/lokalet-1.jpg', alt: 'Baren i Bodega med rødt lys' },
-  { src: '/lokalet-2.jpg', alt: 'Lokalet sett fra scenen' },
-  { src: '/lokalet-3.jpg', alt: 'Bordene langs veggen' },
-  { src: '/lokalet-4.jpg', alt: 'Scenen med projektorlerret' },
+  { src: '/lokalet-1.jpg', alt: 'Bord ved vinduet mot Kong Oscars gate i dagslys' },
+  { src: '/lokalet-2.jpg', alt: 'Langbord dekket til middag, med blomster og glass' },
+  { src: '/lokalet-3.jpg', alt: 'Fullt lokale under et arrangement' },
+  { src: '/lokalet-4.jpg', alt: 'Folk tett i tett foran den røde veggen' },
 ];
+
+// Sett denne når plantegningen finnes, så dukker seksjonen opp av seg selv.
+export const PLANTEGNING: { src: string; alt: string } | null = null;

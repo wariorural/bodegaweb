@@ -11,7 +11,6 @@ const FELT = [
   ['dato', 'Ønsket dato'],
   ['antall', 'Antall gjester'],
   ['type', 'Type arrangement'],
-  ['bar', 'Bar'],
   ['melding', 'Melding'],
 ] as const;
 

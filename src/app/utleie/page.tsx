@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { Apningstider, Fakta, Footer, Forespor, Nav, Teknisk } from './deler';
-import { BILDER, INTRO, PRISER } from './innhold';
+import { Apningstider, Fakta, Footer, Forespor, Nav, Plantegning, Teknisk } from './deler';
+import { BILDER, INTRO, PRIS } from './innhold';
 
 export const metadata: Metadata = {
   title: 'Leie Bodega — utleie av lokale i Bergen',
@@ -33,18 +33,17 @@ export default function Utleie() {
           Pris
         </h2>
         <div className="u-priser">
-          {PRISER.map(({ pris, tittel, detalj }) => (
-            <div className="u-pris" key={tittel}>
-              <span className="u-pris-tall">{pris}</span>
-              <span className="u-pris-tittel">{tittel}</span>
-              <span className="u-pris-detalj">{detalj}</span>
-            </div>
-          ))}
+          <div className="u-pris">
+            <span className="u-pris-tall">{PRIS.pris}</span>
+            <span className="u-pris-tittel">{PRIS.tittel}</span>
+            <span className="u-pris-detalj">{PRIS.detalj}</span>
+          </div>
         </div>
       </section>
 
       <Fakta />
       <Apningstider />
+      <Plantegning />
       <Teknisk />
       <Forespor />
       <Footer />

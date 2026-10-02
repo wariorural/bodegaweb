@@ -533,7 +533,8 @@ body:has(.u-side) { padding-bottom: 0; }
 /* Prisene som to valg man sammenligner side om side. */
 .u-priser {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  /* Taket på 26rem: med ÉN pris strakk 1fr kortet over hele spalten. */
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 26rem));
   gap: var(--pad-x);
 }
 .u-pris {
@@ -559,6 +560,14 @@ body:has(.u-side) { padding-bottom: 0; }
   object-fit: cover;
 }
 .u-stripe img + img { border-left: var(--stroke) solid var(--red); }
+
+.u-plan {
+  display: block;
+  width: 100%;
+  max-width: 48rem;
+  height: auto;
+  border: var(--stroke) solid var(--red);
+}
 
 /* ─── Lister ─── */
 .u-liste { display: grid; }
