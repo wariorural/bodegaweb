@@ -11,14 +11,18 @@ uendret.
 
 ## Avhengig av Mario
 
-- [ ] **3–4 vibbebilder** av lokalet. Legges i `public/lokalet-1..4.jpg`.
-      Skissene kjører med plassholdere til de kommer.
+- [x] ~~Vibbebilder~~ → fire inne, beskåret 4:5
+- [ ] **Plantegning** — seksjonen finnes og rendrer ingenting til `PLANTEGNING`
+      settes i `innhold.ts`. PDF eller bilde.
 - [ ] **Utstyrsliste** — `fakta.md` har bare «projektor, lerret og mic».
       Står det en PA, en mikser, DJ-rigg? Fyll `TEKNISK` i `utleie/innhold.ts`.
+- [ ] **`Bodega/fakta.md`** oppgir fortsatt 2 500 kr som generelt alternativ.
+      Siden gjør det ikke lenger. Mail-utkastene leser fakta.md.
 - [x] ~~Velg retning~~ → B «Lokalet»
-- [ ] **`RESEND_API_KEY`** — til den er satt svarer skjemaet «Klarte ikke
-      sende. Send gjerne en mail til bodega@part.no i stedet.»
-      `npx vercel env add RESEND_API_KEY production` (og `preview`), så redeploy.
+- [x] ~~`RESEND_API_KEY`~~ satt i Production. Testforespørsel mot prod ga 200.
+      Leveringen i innboksen er ikke verifisert herfra — Gmail-koblingen er ikke
+      autentisert i denne sesjonen.
+- [ ] `RESEND_API_KEY` mangler fortsatt i **Preview**.
 - [ ] **Godkjenning fra styret** på tekst og priser → så fjernes `robots` fra
       `utleie/page.tsx` og footerens «Leie Bodega?» blir lenke til `/utleie`.
 
