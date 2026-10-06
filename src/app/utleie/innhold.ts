@@ -21,9 +21,11 @@
 */
 
 export const INTRO =
-  'Bodega er et lite lokale med stor stemme — 67 plasser, bar, scene og projektor. ' +
-  'Vi leier ut til bursdager, slipp, visninger, firmafester og alt som tåler å bli ' +
-  'litt høyt. Dere får lokalet som det er: rødt, lavt under taket og allerede i stemning.';
+  'Bodega er PARTs møteplass i Kong Oscars gate 23 — et lite lokale med stor ' +
+  'stemme, etablert for byens design- og arkitekturfelt. Vi leier det også ut: til ' +
+  'slipp, visninger, foredrag, bursdager, firmafester og alt som tåler å bli litt ' +
+  'høyt. Dere får lokalet som det er: 67 plasser, bar, scene og projektor — rødt, ' +
+  'lavt under taket og allerede i stemning.';
 
 export const PRIS = {
   pris: '3\u00a0750\u00a0kr',

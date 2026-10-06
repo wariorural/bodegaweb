@@ -40,6 +40,15 @@ ingen console-feil, avkrysningene 20×44 (firkant mot radioens oval), payload
 sender begge grupper kommaseparert. Mailkroppen er ikke sett — lokal
 `RESEND_API_KEY` er ugyldig, så ruten stopper på 502 før utsending.
 
+## Intro-teksten 06.10
+
+Mario viste teksten fra part.no: Bodega er «en møteplass for byens design- og
+arkitekturfelt». Utleiesidens INTRO lovet noe annet — bursdager og firmafester
+først. Omskrevet til rekkefølgen hva Bodega er → hva det leies til → hva dere
+får. De praktiske tallene (67 plasser, bar, scene, projektor) flyttet til siste
+setning, ingen fakta tapt. Teksten fra part.no ligger nå i `fakta.md`, så
+mail-utkastene bruker samme ramme.
+
 ## Avhengig av Mario
 
 - [x] ~~Vibbebilder~~ → fire inne, beskåret 4:5
