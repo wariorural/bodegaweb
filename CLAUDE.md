@@ -15,13 +15,24 @@ Offentlig kalenderside for Bodega bar (Kong Oscars Gate 23, Bergen). Siden er li
 
 ## Deploy
 
-Push til `main` → auto-deploy. URL: `bodega.part.no`. Forvent noen sekunders delay.
+Push til `main` → auto-deploy. URL: `bodega.part.no`.
 
 ```bash
 git push origin main
 ```
 
 Bruk alltid `gh auth token` for auth — PAT i remote-URL kan utløpe.
+
+**Regn med to minutter, ikke sekunder.** Sjekker du for tidlig, ser du den gamle
+siden og tror pushen ikke virket. Status uten å gjette:
+
+```bash
+npx vercel ls
+```
+
+**`curl` mot bodega.part.no svarer 403** med `x-vercel-mitigated: challenge` — en
+bot-sperre som treffer hele domenet, også forsiden. Siden er ikke nede, og det er
+ikke noe du har ødelagt. Verifiser i nettleser i stedet.
 
 ## Designsystem
 
