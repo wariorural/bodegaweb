@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { PUNKTER, PUNKT_NOTE, TEKNISK } from './innhold';
 
 const TYPER = ['Lukket arrangement', 'Åpent arrangement', 'Vet ikke ennå'];
 
@@ -19,11 +20,19 @@ export default function Skjema() {
     setStatus('sender');
     setFeil('');
 
-    const felt = Object.fromEntries(new FormData(e.currentTarget));
+    const data = new FormData(e.currentTarget);
+    const felt = Object.fromEntries(data);
     const res = await fetch('/api/utleie', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...felt, t: apnet.current }),
+      // Avkrysningsgruppene må hentes med getAll — Object.fromEntries beholder
+      // bare den siste verdien når flere bokser deler navn.
+      body: JSON.stringify({
+        ...felt,
+        utstyr: data.getAll('utstyr').join(', '),
+        punkt: data.getAll('punkt').join(', '),
+        t: apnet.current,
+      }),
     }).catch(() => null);
 
     sender.current = false;
@@ -83,6 +92,32 @@ export default function Skjema() {
           </label>
         ))}
       </fieldset>
+
+      <fieldset className="u-valg">
+        <legend>Utstyr dere ønsker</legend>
+        {TEKNISK.map((t) => (
+          <label key={t}>
+            <input type="checkbox" name="utstyr" value={t} />
+            <span>{t}</span>
+          </label>
+        ))}
+      </fieldset>
+
+      <fieldset className="u-valg">
+        <legend>Foredrag eller innlegg</legend>
+        <p className="u-note">{PUNKT_NOTE}</p>
+        {PUNKTER.map((p) => (
+          <label key={p}>
+            <input type="checkbox" name="punkt" value={p} />
+            <span>{p}</span>
+          </label>
+        ))}
+      </fieldset>
+
+      <label className="u-felt">
+        <span>Om foredraget</span>
+        <textarea name="foredrag" rows={3} />
+      </label>
 
       <label className="u-felt">
         <span>Hva har dere lyst til å gjøre?</span>

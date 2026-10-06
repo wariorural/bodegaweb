@@ -16,13 +16,41 @@ Retning B «Lokalet» valgt. Skjemaet verifisert mot prod (200). Fire ekte bilde
 inne. 2 500-alternativet fjernet fra både siden og fakta.md. Bodega/ ligger nå på
 det private repoet wariorural/bodega-kunnskap.
 
+## Dagslogg 06.10 — Antons fire punkter
+
+Anton ba (mail 02.10) om utstyrsliste, kart over lokalet, navn A/B på de to
+punktene, og en meldingsboks om foredrag. Tre av fire er bygget:
+
+- Avkrysning «Utstyr dere ønsker» i skjemaet, drevet av samme `TEKNISK`-liste
+  som Teknisk-seksjonen. Én liste å vedlikeholde.
+- Avkrysning «Foredrag eller innlegg» med `PUNKTER` — punkt A ved projektoren,
+  punkt B i vindushjørnet — og forklaringen i `PUNKT_NOTE`.
+- Fritekstfelt «Om foredraget» rett under.
+- Begge grupper havner i mailen (`Ønsket utstyr`, `Foredrag ved`, `Om foredraget`).
+
+Utstyrslista kom fra Mario samme dag og er inne — seks enheter, både som tags i
+Teknisk-seksjonen og som avkrysning i skjemaet. `fakta.md` i bodega-kunnskap er
+rettet tilsvarende (ikke committet der).
+
+Plantegningen venter på fila. A/B-navnene står allerede i `innhold.ts` og skal
+stemme med merkingen på tegningen når den kommer.
+
+Verifisert 06.10: `npm run build` grønn, 1440px og 375px uten horisontal scroll,
+ingen console-feil, avkrysningene 20×44 (firkant mot radioens oval), payload
+sender begge grupper kommaseparert. Mailkroppen er ikke sett — lokal
+`RESEND_API_KEY` er ugyldig, så ruten stopper på 502 før utsending.
+
 ## Avhengig av Mario
 
 - [x] ~~Vibbebilder~~ → fire inne, beskåret 4:5
 - [ ] **Plantegning** — seksjonen finnes og rendrer ingenting til `PLANTEGNING`
-      settes i `innhold.ts`. PDF eller bilde.
-- [ ] **Utstyrsliste** — `fakta.md` har bare «projektor, lerret og mic».
-      Står det en PA, en mikser, DJ-rigg? Fyll `TEKNISK` i `utleie/innhold.ts`.
+      settes i `innhold.ts`. PDF eller bilde. Be Jørund om den som gikk til Ekko.
+      A og B må merkes på tegningen, med samme navn som `PUNKTER`.
+- [x] ~~**Utstyrsliste**~~ → Mario 06.10: projektor og lerret, stor TV,
+      2 mikrofoner, lydanlegg, Pioneer XDJ-RX3 og en liten miksepult. Inne i
+      `TEKNISK`, og `fakta.md` rettet tre steder (lyd/lys-linja, FAQ-svaret og
+      svarmalen). Mario skrev «1 mikrofon» to ganger — lest som to mikrofoner,
+      bekreft.
 - [x] ~~fakta.md oppgir 2 500 som generelt alternativ~~ → fjernet fire steder,
       og lagt inn igjen som «Ikke offentlig — kun fagforeninger»
 - [x] ~~Velg retning~~ → B «Lokalet»

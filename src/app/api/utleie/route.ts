@@ -1,7 +1,7 @@
 const FRA = 'Bodega utleie <utleie@send.part.no>';
 const TIL = 'bodega@part.no';
 
-// Et menneske bruker lenger enn dette på å fylle ut ni felt.
+// Et menneske bruker lenger enn dette på å fylle ut skjemaet.
 const MIN_UTFYLLINGSTID_MS = 3000;
 
 const FELT = [
@@ -11,6 +11,9 @@ const FELT = [
   ['dato', 'Ønsket dato'],
   ['antall', 'Antall gjester'],
   ['type', 'Type arrangement'],
+  ['utstyr', 'Ønsket utstyr'],
+  ['punkt', 'Foredrag ved'],
+  ['foredrag', 'Om foredraget'],
   ['melding', 'Melding'],
 ] as const;
 

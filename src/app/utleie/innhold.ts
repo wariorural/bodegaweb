@@ -52,16 +52,29 @@ export const APNINGSTIDER_NOTE =
   'Mandag til onsdag holder vi stengt for vanlig drift, men åpner for lukkede ' +
   'arrangementer. Under Bergenfest, Nattjazz og Festspillene kan bevillingen forlenges.';
 
-// Venter på Mario — fakta.md oppgir bare projektor, lerret og mikrofon.
+// Denne lista vises i Teknisk-seksjonen OG er avkrysningsboksene i skjemaet.
+// Legger du til en linje her, kan folk be om den med ett klikk.
 export const TEKNISK = [
   'Projektor og lerret',
-  'Mikrofon',
+  'Stor TV',
+  '2 mikrofoner',
   'Lydanlegg',
+  'DJ-kontroller (Pioneer XDJ-RX3)',
+  'Liten miksepult',
 ];
 
 export const TEKNISK_NOTE =
   'Lyd og lys er inkludert i leien. Trenger dere noe utover dette, skriv det i ' +
   'skjemaet — det er oftest løsbart.';
+
+// De to stedene i lokalet man naturlig snakker fra. Navnene skal stemme med
+// merkingen på plantegningen.
+export const PUNKTER = ['Punkt A — ved projektoren', 'Punkt B — vindushjørnet'];
+
+export const PUNKT_NOTE =
+  'Lokalet har to naturlige steder å snakke fra: punkt A ved projektoren og ' +
+  'lerretet, og punkt B i vindushjørnet. Kryss av hvis noen skal holde foredrag ' +
+  'eller innlegg, og skriv gjerne hvem som snakker og hvor lenge.';
 
 export const BILDER = [
   { src: '/lokalet-1.jpg', alt: 'Bord ved vinduet mot Kong Oscars gate i dagslys' },
