@@ -11,6 +11,8 @@ const FELT = [
   ['dato', 'Ønsket dato'],
   ['antall', 'Antall gjester'],
   ['type', 'Type arrangement'],
+  ['bar', 'Baren'],
+  ['baransvarlig', 'Ansvarlig for baren'],
   ['utstyr', 'Ønsket utstyr'],
   ['punkt', 'Foredrag ved'],
   ['foredrag', 'Om foredraget'],

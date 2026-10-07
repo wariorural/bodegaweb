@@ -517,6 +517,16 @@ body:has(.u-side) { padding-bottom: 0; }
 }
 
 /* ─── Pris ─── */
+/* Full ramme i stedet for --line: lappen skal leses før prisen under, ellers
+   kan 2 500 bli lest som en pris for alle. */
+.u-pris-merke {
+  align-self: start;
+  font-size: var(--size-sm);
+  letter-spacing: 0.08em;
+  color: var(--red);
+  border: var(--stroke) solid var(--red);
+  padding: 6px 12px;
+}
 .u-pris-tall {
   font-size: var(--size-lg);
   line-height: 1;
@@ -565,9 +575,13 @@ body:has(.u-side) { padding-bottom: 0; }
   display: block;
   width: 100%;
   max-width: 48rem;
-  height: auto;
   border: var(--stroke) solid var(--red);
+  /* currentColor — streken i tegningen arver denne. */
+  color: var(--red);
 }
+.u-plan svg { display: block; width: 100%; height: auto; }
+/* Overstyrer det Illustrator skriver inn i fila, så tegningen kan sendes urørt. */
+.u-plan svg text { font-family: inherit; fill: currentColor; }
 
 /* ─── Lister ─── */
 .u-liste { display: grid; }
@@ -643,26 +657,59 @@ body:has(.u-side) { padding-bottom: 0; }
   cursor: pointer;
 }
 /* Nettleserens egen radio er nesten umulig å lese som av/på på rød flate:
-   avkrysset og ikke avkrysset ble to like mørke prikker.
-   Ovalen er et valg, ikke en feil — ikke gjør den sirkulær. 20×44 er samme
-   høyde som tekstfeltene, så kontrollene står på én rytme, og 44px er dessuten
-   minste trykkflate, altså er selve knappen hele treffområdet. */
-.u-valg input {
+   avkrysset og ikke avkrysset ble to like mørke prikker. Men den trenger ikke
+   tegnes med CSS heller — ○ og • finnes begge i Neureal, så av/på kan settes i
+   samme skrift som teksten ved siden av. Selve inputen legges usynlig oppå hele
+   etiketten, så tastatur og trykkflate er uendret. */
+.u-valg label { position: relative; }
+.u-valg input[type='radio'] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+/* Ringen står alltid, prikken legges oppå. Bytter man ○ ut med • i stedet for å
+   stable dem, blir det valgte alternativet den minste flekken i rada — altså
+   det stilleste, som er stikk motsatt av hva et valgt valg skal være. */
+.u-valg input[type='radio'] + span {
+  position: relative;
+  padding-left: 30px;
+}
+.u-valg input[type='radio'] + span::before,
+.u-valg input[type='radio'] + span::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 20px;
+  text-align: center;
+}
+.u-valg input[type='radio'] + span::before { content: '\25CB'; }
+.u-valg input[type='radio']:checked + span::after { content: '\2022'; }
+.u-valg input[type='radio']:focus-visible + span::before {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+  border-radius: 50%;
+}
+
+/* Flervalg har ingen glyf å låne — Neureal har ingen firkant — så boksen
+   tegnes. 20×44 er samme høyde som tekstfeltene, så kontrollene står på én
+   rytme, og 44px er dessuten minste trykkflate. */
+.u-valg input[type='checkbox'] {
   appearance: none;
   width: 20px;
   height: 44px;
   flex-shrink: 0;
   margin: 0;
   border: var(--stroke) solid var(--red);
-  border-radius: 50%;
   cursor: pointer;
 }
-.u-valg input:checked {
+.u-valg input[type='checkbox']:checked {
   background: var(--red);
   box-shadow: inset 0 0 0 4px var(--bg);
 }
-/* Flervalg skal se annerledes ut enn ettvalg: samme 20×44, uten rundingen. */
-.u-valg input[type='checkbox'] { border-radius: 0; }
 /* Forklaringen står mellom legend og boksene, så --note sitt margin-top på 20px
    ville dyttet den ned i valgene. */
 .u-valg .u-note { margin-top: 0; margin-bottom: 14px; }

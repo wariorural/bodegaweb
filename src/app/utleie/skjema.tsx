@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { PUNKTER, PUNKT_NOTE, TEKNISK } from './innhold';
+import { BAR_NOTE, BAR_VALG, PUNKTER, PUNKT_NOTE, TEKNISK } from './innhold';
 
 const TYPER = ['Lukket arrangement', 'Åpent arrangement', 'Vet ikke ennå'];
 
@@ -92,6 +92,20 @@ export default function Skjema() {
           </label>
         ))}
       </fieldset>
+
+      <fieldset className="u-valg">
+        <legend>Baren</legend>
+        <p className="u-note">{BAR_NOTE}</p>
+        <label>
+          <input type="checkbox" name="bar" value={BAR_VALG} />
+          <span>{BAR_VALG}</span>
+        </label>
+      </fieldset>
+
+      <label className="u-felt">
+        <span>Ansvarlig for baren</span>
+        <input name="baransvarlig" autoComplete="off" />
+      </label>
 
       <fieldset className="u-valg">
         <legend>Utstyr dere ønsker</legend>

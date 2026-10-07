@@ -1,9 +1,11 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import Link from 'next/link';
 import {
   APNINGSTIDER,
   APNINGSTIDER_NOTE,
   FAKTA,
-  PLANTEGNING,
+  PLANTEGNING_ALT,
   TEKNISK,
   TEKNISK_NOTE,
 } from './innhold';
@@ -38,14 +40,33 @@ export function Fakta() {
   );
 }
 
+// SVG-en skrives rett inn i siden i stedet for å lastes som <img>. Et <img> er sin
+// egen lille verden: den når hverken Neureal eller sidens farger, så teksten i
+// tegningen måtte vært outlinet og streken farget på forhånd. Inline arver den begge.
+// Lesingen skjer under bygget — /utleie er en statisk side.
+function lesPlantegning() {
+  try {
+    return readFileSync(join(process.cwd(), 'public/plantegning.svg'), 'utf8');
+  } catch {
+    // Fila er ikke lagt inn ennå. Da hopper seksjonen over seg selv.
+    return null;
+  }
+}
+
 export function Plantegning() {
-  if (!PLANTEGNING) return null;
+  const svg = lesPlantegning();
+  if (!svg) return null;
   return (
     <section className="u-seksjon" aria-labelledby="h-plan">
       <h2 className="u-h2" id="h-plan">
         Plantegning
       </h2>
-      <img className="u-plan" src={PLANTEGNING.src} alt={PLANTEGNING.alt} />
+      <div
+        className="u-plan"
+        role="img"
+        aria-label={PLANTEGNING_ALT}
+        dangerouslySetInnerHTML={{ __html: svg }}
+      />
     </section>
   );
 }

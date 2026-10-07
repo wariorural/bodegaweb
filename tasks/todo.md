@@ -118,3 +118,60 @@ input-regelen og ble 20×44-ovaler. `:not([type='radio'])` på den regelen.
 `fakta.md` har fire ubesvarte bookingregler: forskuddsbetaling, minimumsbeløp,
 avbestillingsfrist, aldersgrense. En offentlig prisside genererer nettopp de
 spørsmålene.
+
+## Dagslogg 07.10 — fagforeningsprisen tilbake, åpent på siden
+
+Anton (mail 07.10) ba om å beholde 2 500-tilbudet for de som står i baren selv,
+med et engangsbeløp på 500 kr for opplæring og en navngitt ansvarlig. Mario
+presiserte hvorfor: det er et virkemiddel overfor fagforeninger, så mer av
+budsjettet kan gå til foredragsholderen. Besluttet at den står **åpent på siden**,
+men merket så den ikke kan leses som en pris for alle.
+
+- `PRIS` → `PRISER`: to kort side om side. Det nye har merkelappen «Kun for
+  fagforeninger» over prisen, i full ramme (`--red`, ikke `--line`) nettopp fordi
+  den må leses før tallet.
+- `PRIS_NOTE` under kortene gjentar avgrensningen i klartekst.
+- Skjemaet: avkrysning «Vi er en fagforening og vil betjene baren selv» og
+  fritekstfelt «Ansvarlig for baren». Begge går i mailen (`Baren`,
+  `Ansvarlig for baren`) via `FELT` i `api/utleie/route.ts`.
+- `fakta.md` i bodega-kunnskap er rettet i samme økt: bulleten het «Ikke
+  offentlig — kun fagforeninger … Står ikke på nettsiden. Nevn det aldri
+  uoppfordret», og den regelen er nå feil. Ny bullet + svarmal for spørsmålet,
+  som nå vil bli stilt siden prisen står ute. Ikke committet der.
+
+Verifisert: `npm run build` grønn, typecheck grønn. På 1440px ligger kortene side
+om side (begge 416px, samme topplinje), ingen horisontal scroll. **375px er ikke
+sett med øynene** — Chrome-utvidelsen sluttet å svare midt i sjekken. Lest ut av
+CSS-en i stedet: under 600px blir `.u-seksjon` én spalte og `--pad-x` 16px, så
+kortene har 343px å gå på mot `minmax(16rem, …)` = 256px, og stabler seg. Bør
+likevel ses før push.
+
+## Gjenstår
+
+### Plantegningen — inne 07.10
+
+Arkitektens eksport (`public/bod-plan-261007-v1.svg`) var 3,7 MB og 57 602
+`<line>`. `tools/bygg-plantegning.py` gjør den om til `public/plantegning.svg`
+(204 KB) og kan kjøres på nytt hvis det kommer en ny versjon:
+
+    python3 tools/bygg-plantegning.py public/bod-plan-261007-v1.svg public/plantegning.svg
+
+Hva skriptet gjør, og hvorfor det ser ut som det gjør:
+- 55 763 elementer var skravur i nær-hvitt (#dbdbdb/#f0f0f0/#f4f4f4) — tresliten
+  inni bordene og gulvmønster. Usynlig på hvitt, helt borte mot det røde.
+- Måltekst (87°, 1.0, 3.0) og målsettingsapparatet utenfor bygget er ute.
+  Målekryssene tas på mønster — fire korte streker fra samme punkt — ikke på
+  område: inngangspartiet nede til venstre ligger midt i det som ellers ser ut
+  som «utenfor», og en områderegel spiste det.
+- **Klippemaskene må stå.** De settes via CSS-klasser (`.st9 { clip-path: … }`),
+  ikke attributter, så det er ikke mulig å se hvilke som er i bruk. Fjernes de,
+  renner de fylte flatene utover hele tegningen. Derfor legges fargereglene
+  *etter* arkitektens eget stilark, ikke i stedet for.
+- Flater uten `fill`-attributt arver svart. Alle formtypene må settes, ikke bare
+  `rect` og `path` — ett enkelt `<polygon>` var hele fasadebjelken.
+
+Kostnad: siden er 472 KB rå / 90 KB gzippet, fordi Next serialiserer den inlinede
+SVG-en både som HTML og i RSC-payloaden. Omtrent som ett av bildene i stripa.
+Alternativet er `<img>` — halverer sida, men da mister de fem romnavnene Neureal.
+- Fagforeningsprisen bør bekreftes med Martin før push: 500 kr er Antons forslag,
+  ikke et tall noen har sagt ja til ennå.
