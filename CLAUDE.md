@@ -63,15 +63,15 @@ Etablert og ikke til diskusjon — følg det, ikke erstatt det.
 
 ## Kalender-regler (i `eventClass`)
 
-Events med disse taggene i tittelen behandles spesielt:
+Events med disse feltene i beskrivelsen behandles spesielt:
 
-| Tag | Oppførsel |
+| Felt | Oppførsel |
 |-----|-----------|
-| `[Privat]` | Skjules helt fra siden |
-| `[Lukket]` | Vises grået ut med «Lukket»-badge |
-| `stengt`, `ferie`, `påske`, `jul` | Vises som `holiday` (litt grået) |
+| `[Privat]=ja` | Skjules helt fra siden |
+| `[Lukket]=tekst` | Vises nedtonet med teksten som badge |
 
-Brackets strippes fra visningstittel via `cleanTitle()`.
+**Ingen helligdagslogikk** (fjernet 2026-10-21): tom kalender betyr stengt, så
+siden gjetter ikke på «jul»/«påske» i titler. Ikke legg den tilbake.
 
 > **NB — to apper deler kalenderen:** `generators/bodegenerator` henter fra samme Google
 > Calendar og tolker samme `[Felt]=verdi`-konvensjon i sin egen `parseFields`. Endrer du

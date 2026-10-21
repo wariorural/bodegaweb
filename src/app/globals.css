@@ -184,7 +184,6 @@ button.event-row {
 .event-row.today.has-popup:hover { background: var(--red); }
 .event-row.closed { opacity: 0.45; }
 .event-row.closed:hover { background: none; }
-.event-row.holiday { opacity: 0.75; }
 
 .event-date { display: flex; flex-direction: column; }
 

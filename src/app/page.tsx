@@ -146,17 +146,11 @@ function linkify(text: string) {
   return escapeHtml(text).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
 }
 
-// Hele ord, ikke prefiks: «jul» skal treffe juleaften og julebord, men ikke
-// «juli», «Julian Berntzen» eller «Feriekolonien». \p{L} i stedet for \b, fordi
-// \b bare kjenner ASCII — «æøå» regnes som ordgrense.
-const HOLIDAY_RE = /(?<!\p{L})(?:stengt|ferien?|påske\p{L}*|jul(?:e\p{L}*|aften)?)(?!\p{L})/iu;
-
-function eventClass(title: string, parsed: ParsedFields) {
-  // [Privat] avgjøres FØR helligdagsordene. Motsatt rekkefølge gjorde at et
-  // lukket selskap som het «Julebord Firma AS» ble klassifisert som holiday og
-  // rendret offentlig med full tittel, i stedet for å bli skjult.
+// Ingen helligdagsgjetning fra tittelen: tom kalender betyr stengt, så den traff
+// nesten bare åpne arrangementer («Juleølsmaking», «Julian Berntzen»).
+function eventClass(parsed: ParsedFields) {
+  // [Privat] avgjøres først — et privat selskap med [Lukket] skal skjules, ikke vises nedtonet.
   if (parsed.privat) return 'private';
-  if (HOLIDAY_RE.test(title)) return 'holiday';
   if (parsed.lukket !== '') return 'closed';
   return 'has-event';
 }
@@ -261,7 +255,7 @@ export default function Home() {
         // Hardt mellomrom foran tankestreken, så den aldri står alene først på en linje.
         const title = decodeEntities(ev.summary || 'Arrangement').replace(/ ([–—]) /g, ' $1 ');
         const parsed = parseFields(ev.description || '');
-        return { ev, d, title, parsed, cls: eventClass(title, parsed) };
+        return { ev, d, title, parsed, cls: eventClass(parsed) };
       })
       // Filtreres FØR scrollTargetIdx regnes under. Regnet vi på den ufiltrerte
       // lista, ville ref-en aldri bli festet når første kommende rad er [Privat],

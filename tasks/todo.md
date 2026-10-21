@@ -185,5 +185,5 @@ nbsp foran tankestrek, URL-brudd i popup. Testsett: `?data=verst|tom|en|500` (ku
 
 Gjenstår / ikke gjort:
 - [ ] `KALENDER_GUIDE.txt` lover mer om [Privat] enn koden holder (gammelt punkt)
-- [ ] Vurder `[Helligdag]`-tag i stedet for å gjette fra tittelen (beslutning C)
+- [x] Helligdagslogikken fjernet helt (tom kalender = stengt)
 - Bevisst droppet: heldagsarrangementer (tom kalender = stengt)
