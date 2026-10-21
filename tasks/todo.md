@@ -175,3 +175,15 @@ SVG-en både som HTML og i RSC-payloaden. Omtrent som ett av bildene i stripa.
 Alternativet er `<img>` — halverer sida, men da mister de fem romnavnene Neureal.
 - Fagforeningsprisen bør bekreftes med Martin før push: 500 kr er Antons forslag,
   ikke et tall noen har sagt ja til ennå.
+
+## Dagslogg 21.10 — break-ui (worst case-test av kalenderen)
+
+LIVE (`9c54851`, pushet sammen med utleie-commit `93a2728`). Verifisert på bodega.part.no.
+Fikset: popup sentrert (lå i hjørnet siden 28.09), helligdag-regex på hele ord,
+månedsheader wrap, ødelagt bilde skjules, badge på tokens, popup-tittel --size-md,
+nbsp foran tankestrek, URL-brudd i popup. Testsett: `?data=verst|tom|en|500` (kun dev).
+
+Gjenstår / ikke gjort:
+- [ ] `KALENDER_GUIDE.txt` lover mer om [Privat] enn koden holder (gammelt punkt)
+- [ ] Vurder `[Helligdag]`-tag i stedet for å gjette fra tittelen (beslutning C)
+- Bevisst droppet: heldagsarrangementer (tom kalender = stengt)
