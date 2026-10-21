@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
+import dynamic from 'next/dynamic';
+
+const DataToggle = dynamic(() => import('./testdata').then(m => m.DataToggle), { ssr: false });
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY!;
 const CALENDAR_ID = process.env.NEXT_PUBLIC_CALENDAR_ID!;
@@ -143,9 +146,10 @@ function linkify(text: string) {
   return escapeHtml(text).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
 }
 
-// «jul» skal treffe juleaften og julebord, men ikke «juli» — derfor negativt
-// lookahead i stedet for includes, som gjorde «Sommerfest 5. juli» til helligdag.
-const HOLIDAY_RE = /\b(?:stengt|ferie|påske|jul(?!i\b))/i;
+// Hele ord, ikke prefiks: «jul» skal treffe juleaften og julebord, men ikke
+// «juli», «Julian Berntzen» eller «Feriekolonien». \p{L} i stedet for \b, fordi
+// \b bare kjenner ASCII — «æøå» regnes som ordgrense.
+const HOLIDAY_RE = /(?<!\p{L})(?:stengt|ferien?|påske\p{L}*|jul(?:e\p{L}*|aften)?)(?!\p{L})/iu;
 
 function eventClass(title: string, parsed: ParsedFields) {
   // [Privat] avgjøres FØR helligdagsordene. Motsatt rekkefølge gjorde at et
@@ -220,9 +224,16 @@ export default function Home() {
         + `&singleEvents=true`
         + `&maxResults=500`;
       try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
+        const testsett = process.env.NODE_ENV === 'development'
+          ? new URLSearchParams(window.location.search).get('data') : null;
+        let data;
+        if (testsett) {
+          data = { items: (await import('./testdata')).TESTSETT[testsett] ?? [] };
+        } else {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          data = await res.json();
+        }
         const items = (data.items || []).filter((ev: CalEvent) => ev.start.dateTime);
         if (!items.length) { setStatus('empty'); return; }
         const grouped = groupByMonth(items);
@@ -247,7 +258,8 @@ export default function Home() {
     if (!current) return [];
     return current.events
       .map(({ ev, d }) => {
-        const title = decodeEntities(ev.summary || 'Arrangement');
+        // Hardt mellomrom foran tankestreken, så den aldri står alene først på en linje.
+        const title = decodeEntities(ev.summary || 'Arrangement').replace(/ ([–—]) /g, ' $1 ');
         const parsed = parseFields(ev.description || '');
         return { ev, d, title, parsed, cls: eventClass(title, parsed) };
       })
@@ -455,7 +467,16 @@ export default function Home() {
               <h2 className="modal-title" id="modal-title">{modal.title}</h2>
             </div>
             {(modal.bilde || DEFAULT_BILDE) && (
-              <img className="modal-image" src={modal.bilde || DEFAULT_BILDE} alt="" />
+              // En Drive-delingslenke er en nettside, ikke et bilde — da skjules
+              // rammen i stedet for å vise et tomt 4:5-hull. key gir ny <img> per
+              // bilde, så hidden ikke henger igjen til neste popup.
+              <img
+                key={modal.bilde}
+                className="modal-image"
+                src={modal.bilde || DEFAULT_BILDE}
+                alt=""
+                onError={(e) => { e.currentTarget.hidden = true; }}
+              />
             )}
             {modal.info && (
               <div className="modal-body" dangerouslySetInnerHTML={{ __html: linkify(modal.info) }} />
@@ -474,6 +495,7 @@ export default function Home() {
           <a href="mailto:bodega@part.no" className="footer-link">bodega@part.no</a>
         </div>
       </footer>
+      {process.env.NODE_ENV === 'development' && <DataToggle />}
     </>
   );
 }

@@ -85,10 +85,15 @@ nav {
   z-index: 99;
 }
 
+/* «september 2026» er for bredt for 320px — uten wrap dyttet det pila ut av
+   skjermen. Året går heller på egen linje. */
 .month-label {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: baseline;
-  gap: 12px;
+  gap: 0 12px;
+  min-width: 0;
 }
 
 .month-name {
@@ -247,10 +252,9 @@ button.event-row {
   font-size: var(--size-sm);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  border: 1px solid #ccc;
-  color: #aaa;
-  background: #f0f0ee;
+  border: var(--stroke) solid currentColor;
   padding: 4px 12px;
+  text-align: center;
   display: inline-block;
   width: fit-content;
 }
@@ -297,6 +301,9 @@ button.event-row {
 /* <dialog> + showModal() gir fokusfelle, Escape, inert bakgrunn og fokus tilbake
    til raden som åpnet den — alt gratis fra nettleseren. */
 .modal-frame {
+  /* * { margin: 0 } øverst fjerner nettleserens egen margin: auto, som er det
+     som sentrerer en <dialog>. Uten denne satt popupen i øvre venstre hjørne. */
+  margin: auto;
   border: none;
   padding: 3px;
   background: var(--red);
@@ -351,6 +358,7 @@ button.event-row {
   object-fit: cover;
   border-bottom: var(--stroke) solid var(--red);
 }
+.modal-image[hidden] { display: none; }
 
 .modal-header .event-overtitle {
   position: static;
@@ -367,8 +375,10 @@ button.event-row {
   margin-bottom: 8px;
 }
 
+/* --size-md, som designsystemet sier. Med --size-lg tok en lang tittel i den
+   sticky headeren to tredjedeler av popupen på desktop. */
 .modal-title {
-  font-size: var(--size-lg);
+  font-size: var(--size-md);
   font-weight: normal;
   line-height: 1.05;
   color: var(--black);
@@ -381,6 +391,7 @@ button.event-row {
   line-height: 1.6;
   color: var(--black);
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .modal-body a {
