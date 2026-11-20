@@ -27,30 +27,13 @@ export const INTRO =
   'høyt. Dere får lokalet som det er: 67 plasser, bar, scene og projektor — rødt, ' +
   'lavt under taket og allerede i stemning.';
 
-// To priser. «merke» er den lille lappen over prisen — la den stå tom ('') på
-// prisene som gjelder alle.
 export const PRISER = [
   {
-    merke: '',
     pris: '3\u00a0750\u00a0kr',
     tittel: 'Hele lokalet',
     detalj: 'Inkludert moms. Vi rigger og står i baren, så dere slipper å tenke på det.',
   },
-  {
-    merke: 'Kun for fagforeninger',
-    pris: '2\u00a0500\u00a0kr',
-    tittel: 'Dere står i baren',
-    detalj:
-      'Inkludert moms, pluss 500\u00a0kr for opplæring — én gang. Vi lærer opp én person ' +
-      'hos dere, som står ansvarlig i baren den kvelden. Det dere sparer, kan gå til ' +
-      'foredragsholderen.',
-  },
 ];
-
-export const PRIS_NOTE =
-  'Fagforeningsprisen gjelder bare fagforeninger, og bare når dere betjener baren ' +
-  'selv. Er dere usikre på om dere kommer inn under den, bare si det i skjemaet ' +
-  '— vi svarer på det.';
 
 export const FAKTA = [
   { label: 'Kapasitet', verdi: '67 personer' },
@@ -96,14 +79,6 @@ export const PUNKT_NOTE =
   'Lokalet har to naturlige steder å snakke fra: punkt A ved projektoren og ' +
   'lerretet, og punkt B i vindushjørnet. Kryss av hvis noen skal holde foredrag ' +
   'eller innlegg, og skriv gjerne hvem som snakker og hvor lenge.';
-
-// Avkrysningen som utløser fagforeningsprisen i skjemaet.
-export const BAR_VALG = 'Vi er en fagforening og vil betjene baren selv';
-
-export const BAR_NOTE =
-  'Fagforeninger kan betjene baren selv til 2\u00a0500\u00a0kr, pluss 500\u00a0kr for ' +
-  'opplæring én gang. Da trenger vi navnet på én person som står ansvarlig i baren — ' +
-  'det er den vi lærer opp.';
 
 export const BILDER = [
   { src: '/lokalet-1.jpg', alt: 'Bord ved vinduet mot Kong Oscars gate i dagslys' },

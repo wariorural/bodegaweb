@@ -3,6 +3,18 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  // Grunnleggende sikkerhetsheadere. X-Frame-Options hindrer at siden (og
+  // utleieskjemaet) bakes inn i en fremmed side for å lure fram klikk.
+  async headers() {
+    return [{
+      source: "/:path*",
+      headers: [
+        { key: "X-Frame-Options", value: "SAMEORIGIN" },
+        { key: "X-Content-Type-Options", value: "nosniff" },
+        { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      ],
+    }];
+  },
   async redirects() {
     return [
       // Permanent adresse for kompasset (QR-koder peker hit).

@@ -52,9 +52,7 @@ mail-utkastene bruker samme ramme.
 ## Avhengig av Mario
 
 - [x] ~~Vibbebilder~~ → fire inne, beskåret 4:5
-- [ ] **Plantegning** — seksjonen finnes og rendrer ingenting til `PLANTEGNING`
-      settes i `innhold.ts`. PDF eller bilde. Be Jørund om den som gikk til Ekko.
-      A og B må merkes på tegningen, med samme navn som `PUNKTER`.
+- [x] ~~**Plantegning**~~ → `public/plantegning.svg`, live med A og B merket
 - [x] ~~**Utstyrsliste**~~ → Mario 06.10: projektor og lerret, stor TV,
       2 mikrofoner, lydanlegg, Pioneer XDJ-RX3 og en liten miksepult. Inne i
       `TEKNISK`, og `fakta.md` rettet tre steder (lyd/lys-linja, FAQ-svaret og
@@ -173,8 +171,7 @@ Hva skriptet gjør, og hvorfor det ser ut som det gjør:
 Kostnad: siden er 472 KB rå / 90 KB gzippet, fordi Next serialiserer den inlinede
 SVG-en både som HTML og i RSC-payloaden. Omtrent som ett av bildene i stripa.
 Alternativet er `<img>` — halverer sida, men da mister de fem romnavnene Neureal.
-- Fagforeningsprisen bør bekreftes med Martin før push: 500 kr er Antons forslag,
-  ikke et tall noen har sagt ja til ennå.
+- ~~Fagforeningsprisen bør bekreftes med Martin~~ → fjernet fra siden 20.11.
 
 ## Dagslogg 21.10 — break-ui (worst case-test av kalenderen)
 
@@ -187,3 +184,62 @@ Gjenstår / ikke gjort:
 - [ ] `KALENDER_GUIDE.txt` lover mer om [Privat] enn koden holder (gammelt punkt)
 - [x] Helligdagslogikken fjernet helt (tom kalender = stengt)
 - Bevisst droppet: heldagsarrangementer (tom kalender = stengt)
+
+## Ønsker fra Mario 19.11.2026
+
+### Først
+- [ ] **Mailknapp** — `mailto:bodega@part.no?subject=Leie%20av%20Bodega` i
+      header/footer og på `/utleie`
+- [ ] **Bildearkiv** — egen side (`/arkiv`), rutenett av bilder fra kvelder,
+      evt. sortert per arrangement eller måned. Kilde: delt Drive-mappe, så nye
+      bilder bare legges i mappa. Samme mønster som `verktoy/charmera-galleri`
+      (filmruller.vercel.app: offentlig mappe, embeddedfolderview, ingen auth)
+
+### Forslag, ikke bestemt
+- [ ] Åpningstider og adresse synlig øverst, med kartlenke
+- [ ] Instagram-lenke
+- [ ] Delbare lenker til enkeltarrangementer i kalenderen
+- [ ] Nyhetsbrev-påmelding (henger sammen med planlagte `bodega-email-automation`)
+- [ ] Delingsbilde (OG) så lenken ser bra ut i meldinger, evt. i bodegenerator-stil
+
+## Dagslogg 20.11 — overhaling (ikke committet, venter på Mario)
+
+Bygget lokalt, verifisert med `next build` + `next start` mot ekte kalender:
+- Programmet hentes på serveren og ligger i HTML-en (34 Event-er i schema.org).
+  Private arrangementer og `[Internt]` når ikke lenger nettleseren i det hele tatt.
+  Henter på nytt hver tredje time (Mario 20.11), og ved hver deploy. Ingen cron.
+- `?e=`-lenker får egen tittel, beskrivelse og delingsbilde (`/bilde/<id>`).
+  «Del arrangementet» i popupen: delingsark på mobil, kopier lenke ellers.
+- Åpningstider midt i nav (lest fra `utleie/innhold.ts`), adresse med kartlenke
+  midt i footeren.
+- Hint om popup: liten + etter undertittelen, eller «Mer info +» under tittelen
+  der det ikke er noen undertittel.
+- Passerte arrangementer tonet ned (0.55).
+- Orddeling i titler: «Musikkvideo-/kveld» i stedet for «Musikkvideokvel/d».
+- Footer: én mail-lenke, «Instagram ↗». `/utleie` er IKKE lenket fra forsiden
+  (Mario 20.11) og fortsatt `noindex`.
+- Sikkerhet: API-nøkkelen ute av klientbundelen, `/bilde/<ukjent>` → 404,
+  X-Frame-Options/nosniff/Referrer-Policy, utleieskjemaet har signert tidsstempel
+  (HMAC, avledet fra RESEND_API_KEY) og lengdegrenser. Testet: uten/falskt/t=0 →
+  400, for raskt → stille 200, for lang → 400, gyldig → videre til Resend.
+
+Etter push:
+- [ ] Del en `?e=`-lenke i Messenger for å se delingsbildet
+- [x] Firewall-regel «Utleieskjema: maks 5 per 10 min» (POST /api/utleie, per IP)
+      → publisert 20.11
+- [ ] Ny Google-nøkkel kun for Calendar API, servernøkkel uten referrer-lås, i
+      env som `GOOGLE_CALENDAR_API_KEY` (ikke NEXT_PUBLIC_); slett den gamle.
+      Mario — krever Google Cloud-tilgang
+
+## Dagslogg 20.11 — gjennomgang av /utleie (ikke committet)
+
+- Fagforeningsprisen fjernet helt (Mario 20.11): kortet, notatet, «Baren» i
+  skjemaet, «Ansvarlig for baren», og feltene i mailen. Én pris igjen: 3 750 kr.
+  `fakta.md` sier fortsatt «Ikke offentlig — kun fagforeninger», som nå stemmer.
+- Alle valg i skjemaet er Neureals ○ med • oppå, også avkrysningene (de var
+  20×44-rektangler). Prikken satt skjevt fordi glyfene ikke deler senter; nå
+  forskjøvet med tall målt i fontfila. Utstyr og punkt er fortsatt flervalg.
+- Pushet 20.11. /utleie er live, men ikke lenket og `noindex` til styret sier ja.
+- Footeren på /utleie lik forsidens: Instagram + telefon, adresse med kartlenke
+  i midten, mail til høyre.
+- Telefon-feltet fikk maxLength som de andre.

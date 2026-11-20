@@ -1,14 +1,18 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { BAR_NOTE, BAR_VALG, PUNKTER, PUNKT_NOTE, TEKNISK } from './innhold';
+import { useEffect, useRef, useState } from 'react';
+import { PUNKTER, PUNKT_NOTE, TEKNISK } from './innhold';
 
 const TYPER = ['Lukket arrangement', 'Åpent arrangement', 'Vet ikke ennå'];
 
 export default function Skjema() {
   const [status, setStatus] = useState<'klar' | 'sender' | 'sendt'>('klar');
   const [feil, setFeil] = useState('');
-  const apnet = useRef(Date.now());
+  // Signert tidsstempel fra serveren — tidsvakten mot bots (se api/utleie).
+  const stempel = useRef('');
+  useEffect(() => {
+    fetch('/api/utleie').then(r => r.json()).then(d => { stempel.current = d.t; }).catch(() => {});
+  }, []);
   // disabled midt i en jobb flytter fokus til <body> og gir det aldri tilbake,
   // og fjerner knappen fra tilgjengelighetstreet. Vakt + aria-busy i stedet.
   const sender = useRef(false);
@@ -31,7 +35,7 @@ export default function Skjema() {
         ...felt,
         utstyr: data.getAll('utstyr').join(', '),
         punkt: data.getAll('punkt').join(', '),
-        t: apnet.current,
+        t: stempel.current,
       }),
     }).catch(() => null);
 
@@ -60,18 +64,18 @@ export default function Skjema() {
       <div className="u-rad">
         <label className="u-felt">
           <span>Navn</span>
-          <input name="navn" required autoComplete="name" />
+          <input name="navn" maxLength={300} required autoComplete="name" />
         </label>
         <label className="u-felt">
           <span>E-post</span>
-          <input name="epost" type="email" required autoComplete="email" />
+          <input name="epost" type="email" maxLength={300} required autoComplete="email" />
         </label>
       </div>
 
       <div className="u-rad">
         <label className="u-felt">
           <span>Telefon</span>
-          <input name="telefon" type="tel" inputMode="tel" autoComplete="tel" />
+          <input name="telefon" type="tel" maxLength={300} inputMode="tel" autoComplete="tel" />
         </label>
         <label className="u-felt">
           <span>Ønsket dato</span>
@@ -92,20 +96,6 @@ export default function Skjema() {
           </label>
         ))}
       </fieldset>
-
-      <fieldset className="u-valg">
-        <legend>Baren</legend>
-        <p className="u-note">{BAR_NOTE}</p>
-        <label>
-          <input type="checkbox" name="bar" value={BAR_VALG} />
-          <span>{BAR_VALG}</span>
-        </label>
-      </fieldset>
-
-      <label className="u-felt">
-        <span>Ansvarlig for baren</span>
-        <input name="baransvarlig" autoComplete="off" />
-      </label>
 
       <fieldset className="u-valg">
         <legend>Utstyr dere ønsker</legend>
@@ -130,12 +120,12 @@ export default function Skjema() {
 
       <label className="u-felt">
         <span>Om foredraget</span>
-        <textarea name="foredrag" rows={3} />
+        <textarea name="foredrag" rows={3} maxLength={5000} />
       </label>
 
       <label className="u-felt">
         <span>Hva har dere lyst til å gjøre?</span>
-        <textarea name="melding" rows={5} required />
+        <textarea name="melding" rows={5} maxLength={5000} required />
       </label>
 
       <div className="u-honeypot" aria-hidden="true">

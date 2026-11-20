@@ -9,6 +9,7 @@ import {
   TEKNISK,
   TEKNISK_NOTE,
 } from './innhold';
+import { KART } from '../kalender';
 import Skjema from './skjema';
 
 export function Nav() {
@@ -131,18 +132,18 @@ export function Footer() {
           rel="noopener noreferrer"
           className="footer-link"
         >
-          @bodega.part.no
+          Instagram ↗
         </a>
         <a href="tel:+4799112799" className="footer-link">
           99 11 27 99
         </a>
       </div>
-      <div className="footer-lease">
-        <a href="mailto:bodega@part.no" className="footer-link">
-          bodega@part.no
-        </a>
-        <span className="footer-link">Kong Oscars gate 23</span>
-      </div>
+      <a href={KART} target="_blank" rel="noopener noreferrer" className="footer-link footer-midt">
+        Kong Oscars gate{'\u00a0'}23<br />5017 Bergen
+      </a>
+      <a href="mailto:bodega@part.no?subject=Leie%20av%20Bodega" className="footer-link">
+        bodega@part.no
+      </a>
     </footer>
   );
 }

@@ -18,11 +18,13 @@ export const metadata: Metadata = {
     siteName: "Bodega",
     locale: "nb_NO",
     type: "website",
+    images: [{ url: "/bilde/standard", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Bodega",
     description: BESKRIVELSE,
+    images: ["/bilde/standard"],
   },
 };
 

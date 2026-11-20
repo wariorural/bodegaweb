@@ -4,12 +4,16 @@
 
 ## Prosjekt
 
-Offentlig kalenderside for Bodega bar (Kong Oscars Gate 23, Bergen). Siden er live og i aktiv bruk. Henter arrangementer fra Google Calendar API og viser dem som en månedsoversikt.
+Offentlig kalenderside for Bodega bar (Kong Oscars Gate 23, Bergen). Siden er live og i aktiv bruk. Henter arrangementer fra Google Calendar API på serveren og viser dem som en månedsoversikt.
 
 ## Stack
 
 - **Next.js 16.2.1** (Turbopack) — se AGENTS.md for breaking changes
-- **Google Calendar API** — henter events direkte fra frontend, ingen backend
+- **Google Calendar API** — hentes på serveren (`src/app/kalender.ts`) og caches i
+  tre timer, og på nytt ved hver deploy. En ny hendelse i kalenderen vises altså
+  innen tre timer, ikke med en gang. Haster det: deploy på nytt.
+- API-nøkkelen er låst til referrer `bodega.part.no` i Google Cloud, så serveren
+  sender `Referer` selv. Bytter du domene, må låsen eller headeren følge med.
 - **Ren CSS** i `src/app/globals.css` — ingen Tailwind, ingen CSS-in-JS
 - **Ingen Sanity** — all data kommer fra Google Calendar
 
@@ -40,28 +44,34 @@ Etablert og ikke til diskusjon — følg det, ikke erstatt det.
 
 | Token | Verdi |
 |-------|-------|
-| `--red` | `#E8391D` |
-| `--black` | `#111111` |
-| `--bg` | `#F7F5F0` |
+| `--bg` | `#D43218` — rød bakgrunn |
+| `--red` | `#F7F5F0` — krem, all tekst og streker |
+| `--black` | `#F7F5F0` — samme som `--red` |
 | Font | Neureal (lokal), fallback Arial |
 
-**Størrelsessystem — bruk vw, ikke px:**
-- `--size-lg: 5vw` — dato, eventtittel, klokkeslett
-- `--size-md: 4vw` — månedsheader, modaltittel
-- `--size-sm: 1.2vw` — all liten tekst
-- Mobile overstyres via `:root` i media query
+Navnene er historiske: siden ble invertert, variablene ble stående. Tenk på
+`--red`/`--black` som «forgrunn».
+
+**Størrelsessystem — fire trinn, `clamp()` med vw + rem (se `:root` i `globals.css`):**
+- `--size-lg` — dato, eventtittel, klokkeslett
+- `--size-md` — månedsheader, modaltittel
+- `--size-xs` — arrangør, undertittel, modal-brødtekst
+- `--size-sm` — all liten tekst (nav, footer, ukedag, «Mer info +»)
 
 **Regel: færrest mulig distinkte størrelser.** Ny tekst skal bruke en eksisterende variabel. Ikke legg til nye størrelser uten god grunn.
 
 ## Kode-filosofi
 
 - Ren CSS i `globals.css` — ingen inline styles, ingen ny CSS-fil
-- Struktur i `src/app/page.tsx` (klient-komponent)
+- `page.tsx` (server): nav, footer, metadata per `?e=`, schema.org/Event
+- `kalender.ts` (server): henting, tolking av `[Felt]=`, gruppering i måneder
+- `kalender-visning.tsx` (klient): månedsbytte, popup, del-knapp
+- `bilde/[id]/route.tsx`: delingsbilde per arrangement (`/bilde/standard` for forsiden)
 - Skriv minst mulig kode for å løse problemet
 - Ikke legg til feilhåndtering for ting som ikke kan skje
 - Ikke legg til kommentarer der koden er selvforklarende
 
-## Kalender-regler (i `eventClass`)
+## Kalender-regler (i `tilRad` i `kalender.ts`)
 
 Events med disse feltene i beskrivelsen behandles spesielt:
 
@@ -77,8 +87,8 @@ siden gjetter ikke på «jul»/«påske» i titler. Ikke legg den tilbake.
 > Calendar og tolker samme `[Felt]=verdi`-konvensjon i sin egen `parseFields`. Endrer du
 > feltnavn eller konvensjon her, oppdatér også `generators/bodegenerator/lib/calendar.ts`.
 
-> **`[bilde]=URL`** i event-beskrivelsen viser et bilde øverst i popupen (`parseFields` →
-> `.modal-image`). Bodega-web viser bevisst *ikke* noe default-bilde (`DEFAULT_BILDE = ''`) —
+> **`[bilde]=URL`** i event-beskrivelsen viser et bilde øverst i popupen (`lesFelter` →
+> `.modal-image`). Bodega-web viser bevisst *ikke* noe default-bilde —
 > kun events med egen `[bilde]=` får bilde. Bodegenerator publiserer slike URL-er, og den
 > eksterne siden gaari.no plukker opp samme felt (og bruker default-bildet der).
 
