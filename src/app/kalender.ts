@@ -172,12 +172,12 @@ async function hentGoogle(): Promise<GoogleEvent[]> {
   const fra = new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth() - 3, 1));
   const til = new Date(Date.UTC(n.getUTCFullYear(), n.getUTCMonth() + 7, 1));
   const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(process.env.NEXT_PUBLIC_CALENDAR_ID!)}/events`
-    + `?key=${process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY}`
+    + `?key=${process.env.GOOGLE_CALENDAR_API_KEY}`
     + `&timeMin=${fra.toISOString()}&timeMax=${til.toISOString()}`
     + `&orderBy=startTime&singleEvents=true&maxResults=500`;
-  // Nøkkelen er låst til henvisninger fra bodega.part.no i Google Cloud. En
-  // server sender ingen Referer av seg selv, så den settes her.
-  const res = await fetch(url, { headers: { Referer: `${SIDE}/` }, next: { revalidate: OPPDATER_HVERT } });
+  // Servernøkkel uten NEXT_PUBLIC_, så den aldri havner i nettleseren. Den er
+  // låst til Google Calendar API i Google Cloud, ikke til et domene.
+  const res = await fetch(url, { next: { revalidate: OPPDATER_HVERT } });
   if (!res.ok) throw new Error(`Google Calendar svarte ${res.status}`);
   return (await res.json()).items ?? [];
 }

@@ -12,8 +12,9 @@ Offentlig kalenderside for Bodega bar (Kong Oscars Gate 23, Bergen). Siden er li
 - **Google Calendar API** — hentes på serveren (`src/app/kalender.ts`) og caches i
   tre timer, og på nytt ved hver deploy. En ny hendelse i kalenderen vises altså
   innen tre timer, ikke med en gang. Haster det: deploy på nytt.
-- API-nøkkelen er låst til referrer `bodega.part.no` i Google Cloud, så serveren
-  sender `Referer` selv. Bytter du domene, må låsen eller headeren følge med.
+- API-nøkkelen er `GOOGLE_CALENDAR_API_KEY` (kun server, Production + Preview i
+  Vercel), låst til Google Calendar API i Google Cloud. Lokalt må den ligge i
+  `.env.local`; uten den viser forsiden «Kunne ikke hente program» (`?data=` virker).
 - **Ren CSS** i `src/app/globals.css` — ingen Tailwind, ingen CSS-in-JS
 - **Ingen Sanity** — all data kommer fra Google Calendar
 
