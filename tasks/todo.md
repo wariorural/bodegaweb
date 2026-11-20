@@ -227,9 +227,11 @@ Etter push:
 - [ ] Del en `?e=`-lenke i Messenger for å se delingsbildet
 - [x] Firewall-regel «Utleieskjema: maks 5 per 10 min» (POST /api/utleie, per IP)
       → publisert 20.11
-- [ ] Ny Google-nøkkel kun for Calendar API, servernøkkel uten referrer-lås, i
-      env som `GOOGLE_CALENDAR_API_KEY` (ikke NEXT_PUBLIC_); slett den gamle.
-      Mario — krever Google Cloud-tilgang
+- [x] Ny Google-nøkkel → `GOOGLE_CALENDAR_API_KEY` (20.11), live og verifisert.
+      Den GAMLE nøkkelen skal IKKE slettes: bodegenerator bruker den fra
+      nettleseren. Gjenstår: fjern `NEXT_PUBLIC_GOOGLE_CALENDAR_API_KEY` fra
+      bodegawebs Vercel-env (ubrukt nå), og evt. bodega.part.no fra den gamle
+      nøkkelens nettstedsliste i Google Cloud.
 
 ## Dagslogg 20.11 — gjennomgang av /utleie (ikke committet)
 
