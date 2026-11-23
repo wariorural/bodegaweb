@@ -3,6 +3,13 @@
 Låst med Mario 02.10.26: ekte endepunkt via Resend, to designretninger til
 gjennomsyn, utstyrsliste og bilder kommer fra Mario.
 
+## 23.11 — lenket fra forsiden, synlig i søk
+
+«Leie / booking →» står i bunnteksten der e-postadressen sto (Marios valg:
+erstatte mailen, ikke legge til en tredje linje), og `robots: noindex` er
+fjernet fra `/utleie`. Footeren har fortsatt to linjer per kolonne, så
+`--footer-h` er uendret. Sjekket på 375 px: footer 80 = body-padding 80.
+
 ## Status 02.10 — LIVE på bodega.part.no/utleie
 
 Retning B «Lokalet» valgt. `noindex, nofollow`, ikke lenket fra forsiden.

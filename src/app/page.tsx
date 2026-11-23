@@ -88,7 +88,7 @@ export default async function Home({ searchParams }: Props) {
       <footer>
         <div className="footer-lease footer-left">
           <a href={KART} target="_blank" rel="noopener noreferrer" className="footer-link">Kong Oscars gate{'\u00a0'}23, 5017{'\u00a0'}Bergen</a>
-          <a href="mailto:bodega@part.no" className="footer-link">bodega@part.no</a>
+          <a href="/utleie" className="footer-link">Leie / booking →</a>
         </div>
         <div className="footer-lease">
           <a href="https://instagram.com/bodega.part.no" target="_blank" rel="noopener noreferrer" className="footer-link">Instagram ↗</a>

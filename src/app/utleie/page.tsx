@@ -7,9 +7,6 @@ export const metadata: Metadata = {
   description:
     'Bodega i Kong Oscars gate 23 leies ut til arrangementer. 67 plasser, bar, scene og projektor. Priser, åpningstider og forespørselsskjema.',
   openGraph: { url: '/utleie', title: 'Leie Bodega' },
-  // Av til styret har sagt ja til tekst og priser. Siden er nåbar for den som
-  // har lenken, men ikke lenket fra forsiden og ikke i søk.
-  robots: { index: false, follow: false },
 };
 
 export default function Utleie() {
