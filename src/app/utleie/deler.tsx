@@ -126,6 +126,14 @@ export function Footer() {
   return (
     <footer className="u-footer">
       <div className="footer-lease footer-left">
+        <a href={KART} target="_blank" rel="noopener noreferrer" className="footer-link">
+          Kong Oscars gate{'\u00a0'}23, 5017{'\u00a0'}Bergen
+        </a>
+        <a href="mailto:bodega@part.no?subject=Leie%20av%20Bodega" className="footer-link">
+          bodega@part.no
+        </a>
+      </div>
+      <div className="footer-lease">
         <a
           href="https://instagram.com/bodega.part.no"
           target="_blank"
@@ -138,12 +146,6 @@ export function Footer() {
           99 11 27 99
         </a>
       </div>
-      <a href={KART} target="_blank" rel="noopener noreferrer" className="footer-link footer-midt">
-        Kong Oscars gate{'\u00a0'}23<br />5017 Bergen
-      </a>
-      <a href="mailto:bodega@part.no?subject=Leie%20av%20Bodega" className="footer-link">
-        bodega@part.no
-      </a>
     </footer>
   );
 }

@@ -72,27 +72,36 @@ nav {
   letter-spacing: 0.05em;
 }
 
-/* Åpningstidene står i sidens midte, ikke i midten av det som er igjen etter
-   logoen — derfor absolutt plassert. Maks-bredden holder av plass til logoen på
-   begge sider; hver dag er en bit som aldri brytes, så på smal skjerm går
-   «Lør 19–01» hel ned på neste linje. */
+/* Forsiden har to rader: BODEGA i omriss over hele bredden, åpningstidene
+   under. --nav-h er summen av dem, så månedsheaderen legger seg rett under. */
+body:has(.nav-forside) {
+  --nav-h: calc(40px + var(--size-md) + 1.25 * var(--size-sm) + var(--stroke));
+}
+.nav-forside {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  height: auto;
+}
+
+.nav-ordmerke,
 .nav-apent {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: max-content;
-  max-width: calc(100% - 2 * var(--pad-x) - 2 * 5em);
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0 1em;
+  justify-content: space-between;
+  padding: 10px var(--pad-x);
   font-size: var(--size-sm);
+  font-weight: normal;
   line-height: 1.25;
   color: var(--red);
-  letter-spacing: 0.05em;
-  text-align: center;
 }
+.nav-ordmerke {
+  font-size: var(--size-md);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: var(--stroke) var(--red);
+}
+.nav-ordmerke span { display: inline-block; }
+.nav-apent { letter-spacing: 0.05em; }
 .nav-apent span { white-space: nowrap; }
 
 /* ─── MONTH HEADER ─── */
@@ -458,16 +467,12 @@ footer {
   background: var(--bg);
   border-top: var(--stroke) solid var(--red);
   padding: 20px var(--pad-x);
-  /* Tre spor: sidene tar plassen de trenger uten å brytes, adressen i midten
-     bryter heller. */
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  column-gap: 16px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  column-gap: 16px;
   z-index: 100;
 }
-footer > :last-child { grid-column: 3; justify-self: end; }
-footer .footer-lease .footer-link { white-space: nowrap; }
 
 .footer-lease {
   display: flex;
@@ -477,8 +482,7 @@ footer .footer-lease .footer-link { white-space: nowrap; }
 }
 
 .footer-left { align-items: flex-start; }
-
-.footer-midt { text-align: center; }
+.footer-lease:last-child .footer-link { white-space: nowrap; }
 
 .footer-link {
   font-size: var(--size-sm);

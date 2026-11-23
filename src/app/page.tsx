@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Kalender from './kalender-visning';
+import Ordmerke from './ordmerke';
 import { APENT, KART, SIDE, erBildelenke, hentProgram, iDag, type Rad } from './kalender';
 
 type Props = { searchParams: Promise<Record<string, string | string[] | undefined>> };
@@ -75,8 +76,8 @@ export default async function Home({ searchParams }: Props) {
         />
       )}
 
-      <nav>
-        <h1 className="nav-logo">Bodega</h1>
+      <nav className="nav-forside">
+        <Ordmerke />
         <p className="nav-apent" aria-label={`Åpent ${APENT.join(', ')}`}>
           {APENT.map(t => <span key={t}>{t}</span>)}
         </p>
@@ -86,13 +87,13 @@ export default async function Home({ searchParams }: Props) {
 
       <footer>
         <div className="footer-lease footer-left">
+          <a href={KART} target="_blank" rel="noopener noreferrer" className="footer-link">Kong Oscars gate{'\u00a0'}23, 5017{'\u00a0'}Bergen</a>
+          <a href="mailto:bodega@part.no" className="footer-link">bodega@part.no</a>
+        </div>
+        <div className="footer-lease">
           <a href="https://instagram.com/bodega.part.no" target="_blank" rel="noopener noreferrer" className="footer-link">Instagram ↗</a>
           <a href="/compass" className="footer-link">Kompass →</a>
         </div>
-        <a href={KART} target="_blank" rel="noopener noreferrer" className="footer-link footer-midt">
-          Kong Oscars gate{'\u00a0'}23<br />5017 Bergen
-        </a>
-        <a href="mailto:bodega@part.no" className="footer-link">bodega@part.no</a>
       </footer>
     </>
   );
