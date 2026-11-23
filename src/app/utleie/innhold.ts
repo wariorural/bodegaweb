@@ -46,7 +46,7 @@ export const FAKTA = [
 
 export const APNINGSTIDER = [
   { dag: 'Mandag–onsdag', tid: 'Stengt' },
-  { dag: 'Torsdag', tid: '19–00' },
+  { dag: 'Torsdag', tid: '16–22.30' },
   { dag: 'Fredag', tid: '15.30–01' },
   { dag: 'Lørdag', tid: '19–01' },
   { dag: 'Søndag', tid: 'Stengt' },
@@ -54,7 +54,8 @@ export const APNINGSTIDER = [
 
 export const APNINGSTIDER_NOTE =
   'Mandag til onsdag holder vi stengt for vanlig drift, men åpner for lukkede ' +
-  'arrangementer. Under Bergenfest, Nattjazz og Festspillene kan bevillingen forlenges.';
+  'arrangementer. Er det arrangement på en torsdag, åpner vi senere og holder ' +
+  'åpent lenger. Under Bergenfest, Nattjazz og Festspillene kan bevillingen forlenges.';
 
 // Denne lista vises i Teknisk-seksjonen OG er avkrysningsboksene i skjemaet.
 // Legger du til en linje her, kan folk be om den med ett klikk.

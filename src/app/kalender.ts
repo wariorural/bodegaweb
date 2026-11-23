@@ -9,7 +9,7 @@ const OPPDATER_HVERT = 3 * 60 * 60;
 export const SIDE = 'https://bodega.part.no';
 export const KART = 'https://maps.google.com/?q=Bodega,+Kong+Oscars+gate+23,+5017+Bergen';
 
-// ['Tor 19–00', 'Fre 15.30–01', 'Lør 19–01'] — lest fra utleiesidens tabell, så
+// ['Tor 16–22.30', 'Fre 15.30–01', 'Lør 19–01'] — lest fra utleiesidens tabell, så
 // åpningstidene bare står ett sted.
 export const APENT = APNINGSTIDER
   .filter(({ tid }) => tid !== 'Stengt')
