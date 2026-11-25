@@ -134,8 +134,14 @@ function escapeHtml(s: string) {
 // Info er dekodet, så den kan inneholde ekte «<». Den rendres som HTML og må
 // escapes før lenke-taggene settes inn — ellers blir «[Info]=<img onerror=…>» i
 // kalenderen et kjørende element.
+const lenke = (url: string, tekst: string) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${tekst}</a>`;
+
+// «Billetter: URL» på egen linje blir bare BILLETTER – en lang billettlenke
+// tok fire linjer i popupen.
 function linkify(tekst: string) {
-  return escapeHtml(tekst).replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+  return escapeHtml(tekst)
+    .replace(/^[ \t]*billett(?:er)?:?[ \t]*(https?:\/\/\S+)/gim, (_, url) => lenke(url, 'BILLETTER'))
+    .replace(/(?<!href=")https?:\/\/[^\s<]+/g, (url) => lenke(url, url));
 }
 
 function tilRad(ev: GoogleEvent): Rad | null {

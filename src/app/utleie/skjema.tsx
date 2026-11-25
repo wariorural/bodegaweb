@@ -53,7 +53,7 @@ export default function Skjema() {
   if (status === 'sendt') {
     return (
       <p className="u-sendt" role="status">
-        Takk — forespørselen er sendt. Vi svarer fra bodega@part.no, vanligvis
+        Takk – forespørselen er sendt. Vi svarer fra bodega@part.no, vanligvis
         innen et par dager.
       </p>
     );

@@ -100,7 +100,7 @@ export async function POST(req: Request) {
       from: FRA,
       to: [TIL],
       reply_to: epost,
-      subject: `Utleie — ${navn}${hent('dato') ? ` · ${hent('dato')}` : ''}`,
+      subject: `Utleie – ${navn}${hent('dato') ? ` · ${hent('dato')}` : ''}`,
       text: `${kropp}\n\n—\nSendt fra skjemaet på bodega.part.no/utleie`,
     }),
   });

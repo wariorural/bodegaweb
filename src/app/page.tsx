@@ -8,7 +8,7 @@ type Props = { searchParams: Promise<Record<string, string | string[] | undefine
 const tekst = (v: string | string[] | undefined) => (typeof v === 'string' ? v : undefined);
 
 function beskrivelse(r: Rad) {
-  return `${r.ukedag} ${r.dato} kl. ${r.tid} på Bodega${r.undertittel ? ` — ${r.undertittel}` : ''}`;
+  return `${r.ukedag} ${r.dato} kl. ${r.tid} på Bodega${r.undertittel ? ` – ${r.undertittel}` : ''}`;
 }
 
 // En delt ?e=-lenke får arrangementets egen tittel og eget delingsbilde, så den
@@ -18,7 +18,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   if (!e) return {};
   const rad = (await hentProgram())?.flatMap(m => m.rader).find(r => r.id === e);
   if (!rad) return {};
-  const title = `${rad.tittel} — Bodega`;
+  const title = `${rad.tittel} – Bodega`;
   const description = beskrivelse(rad);
   const images = [{ url: `/bilde/${rad.id}`, width: 1200, height: 630, alt: `${rad.tittel}, ${rad.ukedag} ${rad.dato}` }];
   return {

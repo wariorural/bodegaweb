@@ -21,10 +21,10 @@
 */
 
 export const INTRO =
-  'Bodega er PARTs møteplass i Kong Oscars gate 23 — et lite lokale med stor ' +
+  'Bodega er PARTs møteplass i Kong Oscars gate 23 – et lite lokale med stor ' +
   'stemme, etablert for byens design- og arkitekturfelt. Vi leier det også ut: til ' +
   'slipp, visninger, foredrag, bursdager, firmafester og alt som tåler å bli litt ' +
-  'høyt. Dere får lokalet som det er: 67 plasser, bar, scene og projektor — rødt, ' +
+  'høyt. Dere får lokalet som det er: 67 plasser, bar, scene og projektor – rødt, ' +
   'lavt under taket og allerede i stemning.';
 
 export const PRISER = [
@@ -38,7 +38,7 @@ export const PRISER = [
 export const FAKTA = [
   { label: 'Kapasitet', verdi: '67 personer' },
   { label: 'Lukket arrangement', verdi: 'Mandag–onsdag' },
-  { label: 'Åpent arrangement', verdi: 'Alle dager — dere booker alle bordene, lokalet er åpent' },
+  { label: 'Åpent arrangement', verdi: 'Alle dager – dere booker alle bordene, lokalet er åpent' },
   { label: 'Skjenkebevilling', verdi: 'Alkoholklasse 1 og 2' },
   { label: 'Mat', verdi: 'Lokalet har ikke kjøkken, så mat må ordnes utenfra' },
   { label: 'Adresse', verdi: 'Kong Oscars gate 23, 5017 Bergen' },
@@ -70,11 +70,11 @@ export const TEKNISK = [
 
 export const TEKNISK_NOTE =
   'Lyd og lys er inkludert i leien. Trenger dere noe utover dette, skriv det i ' +
-  'skjemaet — det er oftest løsbart.';
+  'skjemaet – det er oftest løsbart.';
 
 // De to stedene i lokalet man naturlig snakker fra. Navnene skal stemme med
 // merkingen på plantegningen.
-export const PUNKTER = ['Punkt A — ved projektoren', 'Punkt B — vindushjørnet'];
+export const PUNKTER = ['Punkt A – ved projektoren', 'Punkt B – vindushjørnet'];
 
 export const PUNKT_NOTE =
   'Lokalet har to naturlige steder å snakke fra: punkt A ved projektoren og ' +

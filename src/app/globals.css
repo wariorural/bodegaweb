@@ -408,15 +408,19 @@ button.event-row {
   font-weight: normal;
   line-height: 1.05;
   color: var(--black);
+  text-wrap: balance;
 }
 
 .modal-body {
   padding: 20px var(--pad-x) var(--pad-x);
   font-family: 'Neureal', 'Arial', sans-serif;
   font-size: var(--size-xs);
-  line-height: 1.6;
+  /* Neureal har høy x-høyde, og satsen er bare ~45 tegn: 1.6 ga hull,
+     særlig der tomme linjer fra kalenderen ble en hel ekstra linje. */
+  line-height: 1.35;
   color: var(--black);
   white-space: pre-wrap;
+  text-wrap: pretty;
   overflow-wrap: anywhere;
 }
 

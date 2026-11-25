@@ -3,7 +3,7 @@ import { Apningstider, Fakta, Footer, Forespor, Nav, Plantegning, Teknisk } from
 import { BILDER, INTRO, PRISER } from './innhold';
 
 export const metadata: Metadata = {
-  title: 'Leie Bodega — utleie av lokale i Bergen',
+  title: 'Leie Bodega – utleie av lokale i Bergen',
   description:
     'Bodega i Kong Oscars gate 23 leies ut til arrangementer. 67 plasser, bar, scene og projektor. Priser, åpningstider og forespørselsskjema.',
   openGraph: { url: '/utleie', title: 'Leie Bodega' },

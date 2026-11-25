@@ -6,7 +6,7 @@ const BESKRIVELSE =
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://bodega.part.no"),
-  title: "Bodega — bar i Bergen",
+  title: "Bodega – bar i Bergen",
   description: BESKRIVELSE,
   icons: {
     icon: "/favicon.svg",

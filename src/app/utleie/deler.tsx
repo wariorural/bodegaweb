@@ -114,7 +114,7 @@ export function Forespor() {
         Send en forespørsel
       </h2>
       <p className="u-note u-note-over">
-        Fyll ut det du vet. Er dere usikre på dato eller opplegg, skriv det — vi
+        Fyll ut det du vet. Er dere usikre på dato eller opplegg, skriv det – vi
         finner ut av det sammen.
       </p>
       <Skjema />
