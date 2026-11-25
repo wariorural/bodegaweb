@@ -137,9 +137,10 @@ function escapeHtml(s: string) {
 const lenke = (url: string, tekst: string) => `<a href="${url}" target="_blank" rel="noopener noreferrer">${tekst}</a>`;
 
 // «Billetter: URL» på egen linje blir bare BILLETTER – en lang billettlenke
-// tok fire linjer i popupen.
+// tok fire linjer i popupen. Står det bare «Billetter:» uten lenke, fjernes linja.
 function linkify(tekst: string) {
   return escapeHtml(tekst)
+    .replace(/^[ \t]*billett(?:er)?:?[ \t]*(?:\n|$)/gim, '')
     .replace(/^[ \t]*billett(?:er)?:?[ \t]*(https?:\/\/\S+)/gim, (_, url) => lenke(url, 'BILLETTER'))
     .replace(/(?<!href=")https?:\/\/[^\s<]+/g, (url) => lenke(url, url));
 }
