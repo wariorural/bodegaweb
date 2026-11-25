@@ -2,9 +2,9 @@ import { decodeHTML } from 'entities';
 import { APNINGSTIDER } from './utleie/innhold';
 
 // Programmet hentes på serveren og caches i tre timer (OPPDATER_HVERT), og
-// nullstilles ved hver deploy. Endringer i kalenderen dukker altså opp innen tre
-// timer, ikke med en gang. Første besøk etter utløp får forrige versjon mens den
-// nye hentes i bakgrunnen.
+// nullstilles ved hver deploy. Endringer gjort i Google Kalender dukker altså opp
+// innen tre timer. Lagrer man i bodegenerators programeditor, kaller den
+// /api/oppdater, som tømmer taggen 'program' med en gang.
 const OPPDATER_HVERT = 3 * 60 * 60;
 export const SIDE = 'https://bodega.part.no';
 export const KART = 'https://maps.google.com/?q=Bodega,+Kong+Oscars+gate+23,+5017+Bergen';
@@ -177,7 +177,7 @@ async function hentGoogle(): Promise<GoogleEvent[]> {
     + `&orderBy=startTime&singleEvents=true&maxResults=500`;
   // Servernøkkel uten NEXT_PUBLIC_, så den aldri havner i nettleseren. Den er
   // låst til Google Calendar API i Google Cloud, ikke til et domene.
-  const res = await fetch(url, { next: { revalidate: OPPDATER_HVERT } });
+  const res = await fetch(url, { next: { revalidate: OPPDATER_HVERT, tags: ['program'] } });
   if (!res.ok) throw new Error(`Google Calendar svarte ${res.status}`);
   return (await res.json()).items ?? [];
 }

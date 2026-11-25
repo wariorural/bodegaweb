@@ -11,16 +11,18 @@ interface Props {
   startIdx: number;
   iDag: string;
   apneId?: string;
+  rutenett: boolean;
 }
 
 // Programmet kommer ferdig tolket fra serveren. Det som er igjen her er det som
 // bare kan skje i nettleseren: bla mellom måneder, åpne popupen, dele en lenke.
-export default function Kalender({ maneder, startIdx, iDag, apneId }: Props) {
+export default function Kalender({ maneder, startIdx, iDag, apneId, rutenett: rutenettStart }: Props) {
   const [idx, setIdx] = useState(startIdx);
   const [modal, setModal] = useState<Rad | null>(
     () => maneder?.[startIdx]?.rader.find(r => r.id === apneId && harPopup(r)) ?? null
   );
   const [kopiert, setKopiert] = useState(false);
+  const [rutenett, setRutenett] = useState(rutenettStart);
   const headerRef = useRef<HTMLDivElement>(null);
   const iDagRef = useRef<HTMLElement | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -101,6 +103,16 @@ export default function Kalender({ maneder, startIdx, iDag, apneId }: Props) {
     return () => cancelAnimationFrame(frame);
   }, [idx]);
 
+  // Visningen står i URL-en (?visning=kalender) som måneden, så en delt lenke
+  // og et tilbake-klikk havner i samme visning. Lista er standard.
+  const velgVisning = (r: boolean) => {
+    setRutenett(r);
+    const url = new URL(window.location.href);
+    if (r) url.searchParams.set('visning', 'kalender');
+    else url.searchParams.delete('visning');
+    window.history.replaceState({}, '', url);
+  };
+
   const setRowRef = useCallback((el: HTMLElement | null) => { iDagRef.current = el; }, []);
 
   return (
@@ -116,7 +128,14 @@ export default function Kalender({ maneder, startIdx, iDag, apneId }: Props) {
         </div>
       )}
 
-      <main id="calendar-root">
+      <main id="calendar-root" className={rutenett ? 'visning-rutenett' : undefined}>
+        {current && (
+          <div className="visning-bryter">
+            <button type="button" aria-pressed={!rutenett} onClick={() => velgVisning(false)}>Liste</button>
+            <button type="button" aria-pressed={rutenett} onClick={() => velgVisning(true)}>Kalender</button>
+          </div>
+        )}
+        {current && rutenett && <Rutenett maned={current} iDag={iDag} apne={openModal} />}
         {maneder === null && <div className="state-msg">Kunne ikke hente program.</div>}
         {maneder?.length === 0 && <div className="state-msg">Ingen kommende arrangementer.</div>}
         {current && rader.length === 0 && <div className="empty-month">Ingen arrangementer denne måneden</div>}
@@ -198,6 +217,44 @@ export default function Kalender({ maneder, startIdx, iDag, apneId }: Props) {
 
       {process.env.NODE_ENV === 'development' && <DataToggle />}
     </>
+  );
+}
+
+const UKEDAGER = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'];
+
+// Månedsrutenettet. Lista rendres alltid ved siden av og er det telefonen viser
+// (sju spalter får ikke plass på 375px), så søkemotorer har den uansett.
+function Rutenett({ maned, iDag, apne }: { maned: Maned; iDag: string; apne: (r: Rad) => void }) {
+  const [y, m] = maned.key.split('-').map(Number);
+  const forskyv = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7;
+  const dager = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  return (
+    <div className="kal-grid">
+      {UKEDAGER.map(d => <div key={d} className="kal-ukedag">{d}</div>)}
+      {Array.from({ length: forskyv }, (_, i) => <div key={`f${i}`} className="kal-dag kal-dag--utenfor" />)}
+      {Array.from({ length: dager }, (_, i) => {
+        const dag = `${maned.key}-${String(i + 1).padStart(2, '0')}`;
+        const cls = ['kal-dag', dag === iDag && 'kal-dag--idag', dag < iDag && 'passert'].filter(Boolean).join(' ');
+        return (
+          <div key={dag} className={cls}>
+            <span className="kal-dato">{i + 1}</span>
+            {maned.rader.filter(r => r.dag === dag).map(r => {
+              const inner = (
+                <>
+                  <span className="kal-tid">{r.tid}</span>
+                  {r.overtittel && <span className="kal-over">{r.overtittel}</span>}
+                  <span className="kal-tittel">{r.tittel}</span>
+                  {r.lukket && <span className="kal-tid">{r.lukket}</span>}
+                </>
+              );
+              return harPopup(r)
+                ? <button key={r.id} type="button" className={`kal-arr ${r.cls}`} onClick={() => apne(r)}>{inner}</button>
+                : <div key={r.id} className={`kal-arr ${r.cls}`}>{inner}</div>;
+            })}
+          </div>
+        );
+      })}
+    </div>
   );
 }
 

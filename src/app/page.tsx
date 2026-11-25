@@ -83,7 +83,7 @@ export default async function Home({ searchParams }: Props) {
         </p>
       </nav>
 
-      <Kalender maneder={maneder} startIdx={startIdx} iDag={dag} apneId={e} />
+      <Kalender maneder={maneder} startIdx={startIdx} iDag={dag} apneId={e} rutenett={tekst(sp.visning) === 'kalender'} />
 
       <footer>
         <div className="footer-lease footer-left">
