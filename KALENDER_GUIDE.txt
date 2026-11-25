@@ -1,6 +1,10 @@
 BODEGA — GUIDE TIL KALENDERBESKRIVELSER
 ========================================
 
+ENKLEST: bruk «Program» i bodegenerator (bodegenerator.vercel.app).
+Der har hvert felt sin egen boks, og du ser hvilke arrangementer som
+mangler info. Det under er for deg som skriver rett i Google Kalender.
+
 Når du legger inn et arrangement i Google Kalender kan du bruke
 disse feltene i beskrivelsesfeltet. Skriv ett felt per linje.
 
@@ -49,9 +53,8 @@ TILGJENGELIGE FELT
      Gratis inngang.
 
 [bilde]=https://…
-  → Denne skriver du ikke selv. Knappen «Publiser & kopier lenke»
-    i eventplakat-generatoren lager den og legger den på
-    utklippstavla — du limer den bare inn nederst i beskrivelsen.
+  → Denne skriver du ikke selv. Knappen «Send til kalender» i
+    eventplakat-generatoren legger plakaten inn i arrangementet.
 
 
 REGLER

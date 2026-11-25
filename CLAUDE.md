@@ -10,8 +10,12 @@ Offentlig kalenderside for Bodega bar (Kong Oscars Gate 23, Bergen). Siden er li
 
 - **Next.js 16.2.1** (Turbopack) — se AGENTS.md for breaking changes
 - **Google Calendar API** — hentes på serveren (`src/app/kalender.ts`) og caches i
-  tre timer, og på nytt ved hver deploy. En ny hendelse i kalenderen vises altså
-  innen tre timer, ikke med en gang. Haster det: deploy på nytt.
+  tre timer (fetch-tagg `program`), og på nytt ved hver deploy. Endringer gjort
+  direkte i Google Kalender vises altså innen tre timer. Lagres de i
+  bodegenerators programeditor, kaller den `POST /api/oppdater` (Bearer
+  `OPPDATER_HEMMELIG`), som tømmer taggen med en gang. Haster det ellers: deploy.
+  `/api/oppdater` trenger en Bypass-regel i Vercel-brannmuren, ellers stopper
+  bot-sperra (se Deploy) kallet fra bodegenerator.
 - API-nøkkelen er `GOOGLE_CALENDAR_API_KEY` (kun server, Production + Preview i
   Vercel), låst til Google Calendar API i Google Cloud. Lokalt må den ligge i
   `.env.local`; uten den viser forsiden «Kunne ikke hente program» (`?data=` virker).
@@ -66,7 +70,9 @@ Navnene er historiske: siden ble invertert, variablene ble stående. Tenk på
 - Ren CSS i `globals.css` — ingen inline styles, ingen ny CSS-fil
 - `page.tsx` (server): nav, footer, metadata per `?e=`, schema.org/Event
 - `kalender.ts` (server): henting, tolking av `[Felt]=`, gruppering i måneder
-- `kalender-visning.tsx` (klient): månedsbytte, popup, del-knapp
+- `kalender-visning.tsx` (klient): månedsbytte, popup, del-knapp, og
+  rutenettvisningen (`?visning=kalender`). Lista rendres alltid; rutenettet skjuler
+  den på desktop og skjules selv under 600px, så telefonen alltid får lista.
 - `bilde/[id]/route.tsx`: delingsbilde per arrangement (`/bilde/standard` for forsiden)
 - Skriv minst mulig kode for å løse problemet
 - Ikke legg til feilhåndtering for ting som ikke kan skje
@@ -85,8 +91,9 @@ Events med disse feltene i beskrivelsen behandles spesielt:
 siden gjetter ikke på «jul»/«påske» i titler. Ikke legg den tilbake.
 
 > **NB — to apper deler kalenderen:** `generators/bodegenerator` henter fra samme Google
-> Calendar og tolker samme `[Felt]=verdi`-konvensjon i sin egen `parseFields`. Endrer du
-> feltnavn eller konvensjon her, oppdatér også `generators/bodegenerator/lib/calendar.ts`.
+> Calendar og tolker samme `[Felt]=verdi`-konvensjon. Der ligger både lesing og
+> skriving i `lib/felter.ts` — programeditoren skriver beskrivelsene. Endrer du
+> feltnavn eller konvensjon her, oppdatér også `bodegenerator/lib/felter.ts`.
 
 > **`[bilde]=URL`** i event-beskrivelsen viser et bilde øverst i popupen (`lesFelter` →
 > `.modal-image`). Bodega-web viser bevisst *ikke* noe default-bilde —

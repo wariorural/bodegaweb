@@ -493,6 +493,89 @@ footer {
 }
 .footer-link:hover { opacity: 0.6; }
 
+/* ─── RUTENETT ─── */
+/* Valgfri månedsvisning. Lista er standard og det eneste telefonen viser. */
+.visning-bryter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 0 var(--pad-x);
+  border-bottom: var(--stroke) solid var(--line);
+}
+.visning-bryter button {
+  min-height: 44px;
+  background: none;
+  border: none;
+  font: inherit;
+  font-size: var(--size-sm);
+  letter-spacing: 0.05em;
+  color: var(--red);
+  opacity: 0.55;
+  cursor: pointer;
+}
+.visning-bryter button[aria-pressed="true"] {
+  opacity: 1;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.visning-bryter button:hover { opacity: 1; }
+
+.kal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  padding: 0 var(--pad-x) var(--pad-x);
+}
+.kal-ukedag {
+  font-size: var(--size-sm);
+  letter-spacing: 0.05em;
+  padding: 12px 8px 8px;
+  border-bottom: var(--stroke) solid var(--red);
+}
+.kal-dag {
+  min-height: 9rem;
+  padding: 8px;
+  border-bottom: var(--stroke) solid var(--line);
+  border-right: var(--stroke) solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.kal-dag:nth-child(7n) { border-right: none; }
+.kal-dag.passert { opacity: 0.55; }
+.kal-dag--idag { background: var(--red); color: var(--bg); }
+.kal-dato { font-size: var(--size-sm); }
+.kal-arr {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 44px;
+  text-align: left;
+  color: inherit;
+}
+button.kal-arr {
+  appearance: none;
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+}
+button.kal-arr:hover .kal-tittel { text-decoration: underline; text-underline-offset: 0.15em; }
+.kal-arr.closed { opacity: 0.45; }
+.kal-tid,
+.kal-over { font-size: var(--size-sm); letter-spacing: 0.02em; }
+.kal-tittel {
+  font-size: var(--size-xs);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 601px) {
+  .visning-rutenett .event-row,
+  .visning-rutenett .empty-month { display: none; }
+}
+
 /* ─── RESPONSIVE ─── */
 /* Kun layout. Skalaen over er sammenhengende fra 360px og opp, så
    font-overstyringene som sto her (7vw, 2.5vw, egne --size-*) er borte. */
@@ -504,6 +587,8 @@ footer {
   .event-title-group { align-items: center; }
   .event-subtitle { max-width: 100%; text-align: center; }
   .modal-daytime { font-size: var(--size-sm); }
+  .visning-bryter,
+  .kal-grid { display: none; }
 }
 
 /* ─── UTLEIE ─── */
